@@ -2,12 +2,14 @@
     height: 60px;
     position: relative;
     z-index: 10;
+    background: linear-gradient(to right, #4B4453, #C34A36FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .app-title {
     line-height: 60px;
     vertical-align: middle;
     font-size: 1.35em;
+    color: white;
 }
 
 .app-branding {
@@ -35,7 +37,7 @@
     vertical-align: middle;
     padding-left: 15px;
     padding-right: 15px;
-    color: rgba(0,0,0,0.65);
+    color: white;
 }
 
 .app-nav ul li a:hover {
@@ -43,5 +45,5 @@
 }
 
 .app-nav ul li a.active {
-    color: #0f96f6;
+    color: white;
 }

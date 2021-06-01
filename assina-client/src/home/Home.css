@@ -4,6 +4,7 @@
     overflow: auto;
     position: relative;
     padding-top: 60px;
+    background: linear-gradient(to right, #4B4453, #C34A36FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .home-title {
@@ -11,6 +12,7 @@
     font-weight: 400;
     color: rgba(0,0,0,0.70);
     margin-top: 50px; 
+    color: white;
 }
 
 .graf-bg-container {
