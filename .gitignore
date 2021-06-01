@@ -1,0 +1,3 @@
+# Project exclude paths
+/assina-server/assina-app/target/
+/assina-server/assina-crypto/target/
