@@ -33,11 +33,11 @@ import java.util.Map;
 /**
  * Manages the current user information for a user logged in via OAuth 2
  */
-@Controller
+//@Controller
 public class OAuthUserController {
 
-	@GetMapping("/user")
-	@ResponseBody
+//	@GetMapping("/user")
+//	@ResponseBody
 	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal,
 																	HttpServletRequest request) {
 		String name = principal.getAttribute("name");
@@ -48,8 +48,8 @@ public class OAuthUserController {
 		return Collections.singletonMap("name", name);
 	}
 
-	@GetMapping("/error")
-	@ResponseBody
+//	@GetMapping("/error")
+//	@ResponseBody
 	public String error(HttpServletRequest request) {
 		String message = (String) request.getSession().getAttribute("error.message");
 		request.getSession().removeAttribute("error.message");
