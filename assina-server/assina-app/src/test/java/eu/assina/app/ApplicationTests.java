@@ -18,6 +18,7 @@ package eu.assina.app;
 import eu.assina.app.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
 import eu.assina.app.services.CredentialService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,27 +32,24 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringBootTest
 public class ApplicationTests {
 
-//	@MockBean
-
 	@Autowired
 	CredentialRepository credentialRepository;
 
-//	@MockBean
-//	ClientRegistrationRepository clientRegistrationRepository;
-
-//	@InjectMocks
 	@Autowired
-CredentialService cryptoService;
+	CredentialService cryptoService;
 
 	@Test
-	public void contextLoads() {
-	}
+	public void testCredentialCreationAndStorage() {
+		final AssinaCredential credential = cryptoService.createCredential("bob", "bob");
+		final String id = credential.getId();
+		AssinaCredential loadedCredential = cryptoService.getCredentialWithId(id).get();
+		Assert.assertEquals("Expected the credentials loaded to be equal to those saved",
+				credential, loadedCredential);
 
-	@Test
-	public void testCredentialCreation() {
-		final AssinaCredential credential = cryptoService.createCredential("test_owner");
-		final Pageable pageParams = PageRequest.of(0, 5);
-		final Page<AssinaCredential> page = cryptoService.getCredentialsByOwner("test_owner", pageParams);
-		System.out.println(credential.toString());
+		Pageable pageParams = PageRequest.of(0, 5);
+		final Page<AssinaCredential> bobsCreds = credentialRepository.findByOwner("bob", pageParams);
+		final boolean foundNewCreds = bobsCreds.stream().anyMatch(credential::equals);
+		Assert.assertTrue("Expected to find the newly created creds in a search of all creds belonging to bob",
+				foundNewCreds);
 	}
 }

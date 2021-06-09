@@ -101,7 +101,7 @@ class CredentialControllerTest {
 
   @Test
   public void createCredential_201WithLocationHeaderAndCredentialReturned() throws Exception {
-    when(credentialService.createCredential(USER)).thenReturn(CREDENTIAL);
+    when(credentialService.createCredential(USER, USER)).thenReturn(CREDENTIAL);
     final MockHttpServletRequestBuilder requestBuilder =
         post(credPath())
             .content(asJson(CREDENTIAL));
