@@ -1,10 +1,9 @@
 package eu.assina.app.model;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.util.*;
 
@@ -23,15 +22,20 @@ public class AssinaCredential
 	private String owner;
 	private String description;
 
+	/** store the public key separately from the private key */
+	private PublicKey publicKey;
+
+	/** store the private key separately and encrypt it */
+	@Convert(converter = PrivateKeyConverter.class)
+	private PrivateKey privateKey;
+
 	@Lob
 	private Certificate certificate;
 
-	@Lob
+	/** Mark keyPair transient - we build it from separate private and public key columns */
+	@Transient
 	private KeyPair keyPair;
 
-//	@dddElementCollection
-//	private List<String> keys = new ArrayList<>();
-//
 	public AssinaCredential()
 	{
 		id = UUID.randomUUID().toString();
@@ -79,12 +83,34 @@ public class AssinaCredential
 
 	public KeyPair getKeyPair()
 	{
+		if (keyPair == null) {
+			keyPair = new KeyPair(this.publicKey, this.privateKey);
+		}
 		return keyPair;
 	}
 
 	public void setKeyPair(KeyPair keyPair)
 	{
+		// the keypair is transient, but the private and public are stored
 		this.keyPair = keyPair;
+		this.privateKey = keyPair.getPrivate(); // this is encrypted by the converter
+		this.publicKey = keyPair.getPublic();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AssinaCredential that = (AssinaCredential) o;
+		return Objects.equals(owner, that.owner) &&
+							 Objects.equals(certificate, that.certificate) &&
+							 Objects.equals(keyPair.getPrivate(), that.keyPair.getPrivate()) &&
+							 Objects.equals(keyPair.getPublic(), that.keyPair.getPublic());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(owner, certificate, keyPair);
 	}
 }
 

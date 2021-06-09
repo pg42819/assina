@@ -39,7 +39,7 @@ public class CredentialController
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<AssinaCredential> createCredential(@PathVariable(value = "owner") String owner)
 	{
-		final AssinaCredential credential = cryptoService.createCredential(owner);
+		final AssinaCredential credential = cryptoService.createCredential(owner, owner);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")

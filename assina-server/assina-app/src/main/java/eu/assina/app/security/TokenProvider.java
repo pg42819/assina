@@ -1,6 +1,6 @@
 package eu.assina.app.security;
 
-import eu.assina.app.spring.AppProperties;
+import eu.assina.app.config.AppProperties;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

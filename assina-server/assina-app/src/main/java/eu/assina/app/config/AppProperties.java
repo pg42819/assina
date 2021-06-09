@@ -1,4 +1,4 @@
-package eu.assina.app.spring;
+package eu.assina.app.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@ConfigurationProperties(prefix = "app")
+@ConfigurationProperties(prefix = "assina")
 public class AppProperties {
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();
@@ -14,6 +14,9 @@ public class AppProperties {
     public static class Auth {
         private String tokenSecret;
         private long tokenExpirationMsec;
+
+        // passphrase for symmetrical data-at-rest encrpytion for private keys
+        private String passphrase;
 
         public String getTokenSecret() {
             return tokenSecret;
@@ -29,6 +32,14 @@ public class AppProperties {
 
         public void setTokenExpirationMsec(long tokenExpirationMsec) {
             this.tokenExpirationMsec = tokenExpirationMsec;
+        }
+
+        public String getPassphrase() {
+            return passphrase;
+        }
+
+        public void setPassphrase(String passphrase) {
+            this.passphrase = passphrase;
         }
     }
 

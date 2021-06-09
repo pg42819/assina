@@ -29,17 +29,20 @@ public class CredentialService
 	}
 
 	/**
-	 * Creates a new certificate and keypair combinations and stores them in the repostiory.
+	 * Creates a new certificate and keypair combinations and stores them in the repository.
 	 * The private key is always stored encrypted.
+	 *
+	 * @param owner
 	 * @param subjectDistinguishedName name of the subject used in the certificate
 	 * @return
 	 */
-	public AssinaCredential createCredential(String subjectDistinguishedName)
+	public AssinaCredential createCredential(String owner, String subjectDistinguishedName)
 	{
 		try {
 			final KeyPair keyPair = generator.generateKeyPair();
 			final Certificate selfSignedCert = generator.createSelfSignedCert(keyPair, subjectDistinguishedName);
 			AssinaCredential credential = new AssinaCredential();
+			credential.setOwner(owner);
 			credential.setCertificate(selfSignedCert);
 			// TODO store the keypair in a separate repo securely
 			credential.setKeyPair(keyPair);

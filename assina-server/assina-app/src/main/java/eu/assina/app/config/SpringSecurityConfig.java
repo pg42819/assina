@@ -1,4 +1,4 @@
-package eu.assina.app.spring;
+package eu.assina.app.config;
 
 import eu.assina.app.security.CustomUserDetailsService;
 import eu.assina.app.security.RestAuthenticationEntryPoint;
@@ -112,6 +112,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/auth/**", "/oauth2/**")
                         .permitAll()
+                    // add open access to the root /info - TODO not mentioned in the spec - should it be permitted?
+                    .antMatchers("/info").permitAll()
                     .anyRequest()
                         .authenticated()
                     .and()
