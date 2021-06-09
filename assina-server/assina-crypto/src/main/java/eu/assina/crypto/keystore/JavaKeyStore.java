@@ -15,7 +15,6 @@ import java.security.cert.CertificateException;
 import java.util.Enumeration;
 
 /**
- * Created by adi on 3/7/18.
  */
 public class JavaKeyStore {
 

@@ -99,7 +99,7 @@ public class CertificateGenerator
 		// you can validate by generating a signature and verifying it or by
 		// comparing the moduli by first casting to RSAPublicKey, e.g.:
 
-		RSAPublicKey pubKey = (RSAPublicKey) generatedKeyPair.getPublic();
+		RSAPublicKey pubKey = (RSAPublicKey)generatedKeyPair.getPublic();
 		RSAPrivateKey privKey = (RSAPrivateKey) retrievedKeyPair.getPrivate();
 		System.out.println(pubKey.getModulus().equals(privKey.getModulus()));
 	}
