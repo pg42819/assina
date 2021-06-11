@@ -65,6 +65,21 @@ assina:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
 
+demo:
+  users:
+    - name: Ana Banana
+      username: ana
+      plainPassword: ana
+      email: ana@example.com
+      role: ROLE_ADMIN
+      numCredentials: 1
+    - name: Carlos Santana
+      username: carlos
+      plainPassword: carlos
+      role: ROLE_USER
+      email: carlos@example.com
+      numCredentials: 3
+
 csc:
   info:
     # content used by the CSC info API per 11.1 in the CSC spec

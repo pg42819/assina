@@ -57,7 +57,8 @@ class CredentialControllerTest {
       CREDENTIAL = new AssinaCredential();
       CREDENTIAL.setId(CREDENTIAL_ID);
       CREDENTIAL.setCertificate(selfSignedCert);
-      CREDENTIAL.setKeyPair(keyPair);
+      CREDENTIAL.setPublicKey(keyPair.getPublic());
+      CREDENTIAL.setPrivateKey(keyPair.getPrivate());
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

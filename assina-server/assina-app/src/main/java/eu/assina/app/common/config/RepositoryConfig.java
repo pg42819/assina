@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Configuration
 class RepositoryConfig {
 	private static final Logger log = LoggerFactory.getLogger(RepositoryConfig.class);
@@ -20,7 +22,7 @@ class RepositoryConfig {
 	private PasswordEncoder passwordEncoder;
 
 	@Bean
-	CommandLineRunner initRepository(UserRepository userRepo) {
+	CommandLineRunner initRepository(UserRepository userRepo, DemoProperties demoProperties) {
 		return args -> {
 			if (userRepo.count() == 0) {
 				User admin = new User("admin", "admin", "admin@assina.eu", AuthProvider.local);
@@ -34,6 +36,23 @@ class RepositoryConfig {
 				bob.setPassword(passwordEncoder.encode("bob"));
 				userRepo.save(bob);
 				log.info("Added regular user {}", bob.getName());
+			}
+
+			final List<DemoProperties.DemoUser> demoUsers = demoProperties.getUsers();
+			if (demoUsers != null) {
+				for (DemoProperties.DemoUser demoUser : demoUsers) {
+					// allow for additional users without wiping old ones from last startup
+					if (userRepo.existsByUsername(demoUser.getUsername())) {
+						log.debug("Found demo user {} in database at startup", demoUser.getName());
+					} else {
+						User user = new User(demoUser.getUsername(), demoUser.getName(), demoUser.getEmail(), AuthProvider.local);
+						user.setEmail(demoUser.getEmail());
+						user.setPassword(passwordEncoder.encode(demoUser.getPlainPassword()));
+						user.setRole(demoUser.getRole());
+						userRepo.save(user);
+						log.info("Added demo user {} with role: {}", demoUser.getName(), demoUser.getRole());
+					}
+				}
 			}
 		};
 	}

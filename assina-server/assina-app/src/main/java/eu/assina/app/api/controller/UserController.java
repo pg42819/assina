@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/user/me")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userService.getUserById(userPrincipal.getId());
     }
@@ -38,12 +38,14 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserProfile getUserProfile(@PathVariable(value = "id") String id) {
         UserProfile userProfile = userService.getUserProfile(id);
         return userProfile;
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserProfile> getUsers() {
         List<UserProfile> userProfiles = userService.getUserProfiles();
         return userProfiles;

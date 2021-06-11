@@ -22,9 +22,7 @@ public class User extends DateAudit {
     @NotBlank
     private String username;
 
-    @NotBlank
     @Email
-    @Column(nullable = false)
     private String email;
 
     private String imageUrl;
