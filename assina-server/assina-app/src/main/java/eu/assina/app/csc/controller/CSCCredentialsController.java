@@ -2,7 +2,6 @@ package eu.assina.app.csc.controller;
 
 import eu.assina.app.csc.payload.*;
 import eu.assina.app.csc.services.CSCCredentialsService;
-import eu.assina.app.services.CredentialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

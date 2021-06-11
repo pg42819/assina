@@ -1,6 +1,6 @@
 package eu.assina.app.csc.services;
 
-import eu.assina.app.config.CSCProperties;
+import eu.assina.app.common.config.CSCProperties;
 import eu.assina.app.csc.model.CSCInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

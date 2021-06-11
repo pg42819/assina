@@ -1,18 +1,13 @@
 package eu.assina.app.model;
 
-import eu.assina.app.config.AppProperties;
+import eu.assina.app.common.config.AppProperties;
 import eu.assina.crypto.pem.KeyPemStringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.interfaces.RSAPrivateKey;
 
 @Converter
 public class PrivateKeyConverter implements AttributeConverter<PrivateKey, String> {

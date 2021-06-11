@@ -1,4 +1,4 @@
-package eu.assina.app.config;
+package eu.assina.app.common.config;
 
 import eu.assina.app.security.CustomUserDetailsService;
 import eu.assina.app.security.RestAuthenticationEntryPoint;
@@ -21,6 +21,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static eu.assina.app.common.util.Constants.API_URL_ROOT;
+import static eu.assina.app.common.util.Constants.CSC_URL_ROOT;
 
 @Configuration
 @EnableWebSecurity
@@ -90,10 +93,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .csrf()
                     .disable()
-                .formLogin()
-                    .disable()
-                .httpBasic()
-                    .disable()
+//                .formLogin()
+//                    .disable()
+//                .httpBasic()
+//                    .disable()
                 .exceptionHandling()
             // add our own authentication for our jwt token
                     .authenticationEntryPoint(new RestAuthenticationEntryPoint())
@@ -110,10 +113,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers("/auth/**", "/oauth2/**")
+                    .antMatchers(API_URL_ROOT + "/auth/**", API_URL_ROOT + "/oauth2/**")
                         .permitAll()
                     // add open access to the root /info - TODO not mentioned in the spec - should it be permitted?
-                    .antMatchers("/info").permitAll()
+                    .antMatchers(CSC_URL_ROOT + "/info").permitAll()
                     .anyRequest()
                         .authenticated()
                     .and()

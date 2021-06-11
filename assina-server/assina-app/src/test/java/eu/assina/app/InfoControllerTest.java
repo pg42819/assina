@@ -2,7 +2,7 @@ package eu.assina.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.assina.app.config.CSCProperties;
+import eu.assina.app.common.config.CSCProperties;
 import eu.assina.app.csc.controller.CSCInfoController;
 import eu.assina.app.csc.services.CSCInfoService;
 import org.junit.jupiter.api.Test;

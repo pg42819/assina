@@ -17,7 +17,7 @@ package eu.assina.app;
 
 import eu.assina.app.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
-import eu.assina.app.services.CredentialService;
+import eu.assina.app.api.services.CredentialService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

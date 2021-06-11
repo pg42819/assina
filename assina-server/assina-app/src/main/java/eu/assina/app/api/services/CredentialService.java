@@ -1,4 +1,4 @@
-package eu.assina.app.services;
+package eu.assina.app.api.services;
 
 import eu.assina.app.error.AssinaError;
 import eu.assina.app.error.AssinaException;
@@ -44,8 +44,8 @@ public class CredentialService
 			AssinaCredential credential = new AssinaCredential();
 			credential.setOwner(owner);
 			credential.setCertificate(selfSignedCert);
-			// TODO store the keypair in a separate repo securely
-			credential.setKeyPair(keyPair);
+			credential.setPrivateKey(keyPair.getPrivate());
+			credential.setPublicKey(keyPair.getPublic());
 			credentialRepository.save(credential);
 			return credential;
 		}
@@ -64,6 +64,17 @@ public class CredentialService
 	{
 		Page<AssinaCredential> byOwner = credentialRepository.findByOwner(owner, pageable);
 		return byOwner;
+	}
+
+	/**
+	 * Gets count of credentials by this owner
+	 * @param owner user who owns the credentials (also the subject of the cert
+	 * @return
+	 */
+	public long countCredentialsByOwner(String owner)
+	{
+		long count = credentialRepository.countByOwner(owner);
+		return count;
 	}
 
 	/**

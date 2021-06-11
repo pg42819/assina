@@ -2,10 +2,10 @@ package eu.assina.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.assina.app.controller.CredentialController;
+import eu.assina.app.api.controller.CredentialController;
 import eu.assina.app.error.AssinaError;
 import eu.assina.app.model.AssinaCredential;
-import eu.assina.app.services.CredentialService;
+import eu.assina.app.api.services.CredentialService;
 import eu.assina.crypto.cert.CertificateGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

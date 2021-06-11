@@ -1,4 +1,4 @@
-package eu.assina.app.config;
+package eu.assina.app.common.config;
 
 import eu.assina.app.model.AssinaCredential;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;

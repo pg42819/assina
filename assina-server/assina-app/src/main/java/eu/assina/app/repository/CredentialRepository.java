@@ -29,4 +29,6 @@ public interface CredentialRepository extends PagingAndSortingRepository<AssinaC
      * @see <a https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods">https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods</a>
      */
     Page<AssinaCredential> findByOwner(String owner, Pageable pageable);
+
+    long countByOwner(String owner);
 }

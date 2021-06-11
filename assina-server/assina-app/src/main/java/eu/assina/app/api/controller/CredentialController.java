@@ -1,7 +1,7 @@
-package eu.assina.app.controller;
+package eu.assina.app.api.controller;
 
 import eu.assina.app.model.AssinaCredential;
-import eu.assina.app.services.CredentialService;
+import eu.assina.app.api.services.CredentialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/certs")
+@RequestMapping(value = "/credentials")
 public class CredentialController
 {
 	private CredentialService cryptoService;

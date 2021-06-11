@@ -53,7 +53,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       */
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-        if(StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
+        if (StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
@@ -76,7 +76,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
-
+        // TODO find out what attributes are missing to get username vs name from these
+        // e.g. username may be same as email for some providers
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
         user.setName(oAuth2UserInfo.getName());
@@ -86,6 +87,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
+        // TODO check if name is the right value - what about username - what else can be udpated
         existingUser.setName(oAuth2UserInfo.getName());
         existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
         return userRepository.save(existingUser);

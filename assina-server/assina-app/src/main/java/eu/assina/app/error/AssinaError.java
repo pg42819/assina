@@ -24,6 +24,7 @@ public enum AssinaError {
   private final int httpCode;
   private String desc;
 
+  // TODO expand into CSC errors
   AssinaError(String code, String desc, int httpCode) {
     this.code = code;
     this.desc = desc;

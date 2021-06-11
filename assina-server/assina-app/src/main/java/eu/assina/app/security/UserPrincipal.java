@@ -1,5 +1,6 @@
 package eu.assina.app.security;
 
+import eu.assina.app.model.RoleName;
 import eu.assina.app.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,31 +11,36 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
-    private Long id;
+    private String id;
+    private String name;
+    private String username;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(String id, String username, String name, String email,
+                         String password,
+                         Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.username = username;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
     public static UserPrincipal create(User user) {
-        // This fakes the role into place - normally we should get this from the database
-//        List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-//                                                                              new SimpleGrantedAuthority(role.getName().name())
-//        ).collect(Collectors.toList());
         List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+                singletonList(new SimpleGrantedAuthority(user.getRole()));
 
         return new UserPrincipal(
                 user.getId(),
+                user.getUsername(),
+                user.getName(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities
@@ -47,7 +53,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return userPrincipal;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -62,7 +68,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
@@ -101,6 +107,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return String.valueOf(id);
+        return name;
     }
 }

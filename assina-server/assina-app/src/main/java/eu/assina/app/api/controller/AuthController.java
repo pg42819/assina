@@ -1,7 +1,8 @@
-package eu.assina.app.controller;
+package eu.assina.app.api.controller;
 
 import eu.assina.app.error.BadRequestException;
 import eu.assina.app.model.AuthProvider;
+import eu.assina.app.model.RoleName;
 import eu.assina.app.model.User;
 import eu.assina.app.payload.ApiResponse;
 import eu.assina.app.payload.AuthResponse;
@@ -46,7 +47,7 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
+                        loginRequest.getUsernameOrEmail(),
                         loginRequest.getPassword()
                 )
         );
@@ -59,6 +60,10 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+        if(userRepository.existsByUsername(signUpRequest.getName())) {
+            throw new BadRequestException("Username already in use.");
+        }
+
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
@@ -66,20 +71,20 @@ public class AuthController {
         // Creating user's account
         User user = new User();
         user.setName(signUpRequest.getName());
+        user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setRole(RoleName.ROLE_USER.name());
 
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
+                .fromCurrentContextPath().path("/users/{id}")
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+                .body(new ApiResponse(true, "User registered successfully"));
     }
 
 }

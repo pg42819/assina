@@ -1,11 +1,14 @@
 package eu.assina.app.model;
 
-import javax.persistence.*;
-import java.security.KeyPair;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
-import java.util.*;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Represents the credential object from the CSC Spec v 1.0.4.0:
@@ -14,7 +17,7 @@ import java.util.*;
  *    and a X.509 public key certificate managed by a remote signing service provider on behalf of a user.
  */
 @Entity
-public class AssinaCredential
+public class AssinaCredential extends DateAudit
 {
 	@Id
 	private String id;
@@ -23,6 +26,7 @@ public class AssinaCredential
 	private String description;
 
 	/** store the public key separately from the private key */
+	@Convert(converter = PublicKeyConverter.class)
 	private PublicKey publicKey;
 
 	/** store the private key separately and encrypt it */
@@ -31,10 +35,6 @@ public class AssinaCredential
 
 	@Lob
 	private Certificate certificate;
-
-	/** Mark keyPair transient - we build it from separate private and public key columns */
-	@Transient
-	private KeyPair keyPair;
 
 	public AssinaCredential()
 	{
@@ -81,20 +81,20 @@ public class AssinaCredential
 		this.certificate = certificate;
 	}
 
-	public KeyPair getKeyPair()
-	{
-		if (keyPair == null) {
-			keyPair = new KeyPair(this.publicKey, this.privateKey);
-		}
-		return keyPair;
+	public PublicKey getPublicKey() {
+		return publicKey;
 	}
 
-	public void setKeyPair(KeyPair keyPair)
-	{
-		// the keypair is transient, but the private and public are stored
-		this.keyPair = keyPair;
-		this.privateKey = keyPair.getPrivate(); // this is encrypted by the converter
-		this.publicKey = keyPair.getPublic();
+	public void setPublicKey(PublicKey publicKey) {
+		this.publicKey = publicKey;
+	}
+
+	public PrivateKey getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(PrivateKey privateKey) {
+		this.privateKey = privateKey;
 	}
 
 	@Override
@@ -104,13 +104,12 @@ public class AssinaCredential
 		AssinaCredential that = (AssinaCredential) o;
 		return Objects.equals(owner, that.owner) &&
 							 Objects.equals(certificate, that.certificate) &&
-							 Objects.equals(keyPair.getPrivate(), that.keyPair.getPrivate()) &&
-							 Objects.equals(keyPair.getPublic(), that.keyPair.getPublic());
+							 Objects.equals(publicKey, that.publicKey);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(owner, certificate, keyPair);
+		return Objects.hash(owner, certificate, publicKey);
 	}
 }
 

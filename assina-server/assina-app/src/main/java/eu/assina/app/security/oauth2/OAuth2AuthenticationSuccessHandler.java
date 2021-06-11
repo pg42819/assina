@@ -1,6 +1,6 @@
 package eu.assina.app.security.oauth2;
 
-import eu.assina.app.config.AppProperties;
+import eu.assina.app.common.config.AppProperties;
 import eu.assina.app.error.BadRequestException;
 import eu.assina.app.security.TokenProvider;
 import eu.assina.app.util.CookieUtils;

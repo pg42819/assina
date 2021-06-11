@@ -15,7 +15,7 @@
  */
 package eu.assina.app;
 
-import eu.assina.app.services.CredentialService;
+import eu.assina.app.api.services.CredentialService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

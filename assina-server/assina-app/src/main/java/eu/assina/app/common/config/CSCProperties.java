@@ -1,4 +1,4 @@
-package eu.assina.app.config;
+package eu.assina.app.common.config;
 
 import eu.assina.app.csc.model.AbstractInfo;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,4 +1,4 @@
-package eu.assina.app.config;
+package eu.assina.app.common.config;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
