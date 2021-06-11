@@ -1,8 +1,7 @@
 package eu.assina.app.security;
 
 
-import eu.assina.app.error.ResourceNotFoundException;
-import eu.assina.app.model.User;
+import eu.assina.app.api.model.User;
 import eu.assina.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package eu.assina.app.csc;
+package eu.assina.app.csc.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

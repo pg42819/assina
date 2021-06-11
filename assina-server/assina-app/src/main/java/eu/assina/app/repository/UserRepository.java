@@ -1,6 +1,6 @@
 package eu.assina.app.repository;
 
-import eu.assina.app.model.User;
+import eu.assina.app.api.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

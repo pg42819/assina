@@ -1,14 +1,15 @@
 package eu.assina.app.api.services;
 
-import eu.assina.app.error.ResourceNotFoundException;
-import eu.assina.app.model.User;
-import eu.assina.app.payload.UserProfile;
+import eu.assina.app.api.model.User;
+import eu.assina.app.api.payload.UserProfile;
 import eu.assina.app.repository.CredentialRepository;
 import eu.assina.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,17 +25,12 @@ public class UserService {
         this.credentialRepository = credentialRepository;
     }
 
-    public User getUserById(String id) {
-        User user = userRepository.findById(id)
-                            .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-        return user;
-
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
     }
 
-    public User getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username)
-                            .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        return user;
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public boolean isUsernameAvailable(String username) {
@@ -47,22 +43,22 @@ public class UserService {
         return isAvailable;
     }
 
-    public UserProfile getUserProfile(String id) {
-        User user = getUserById(id);
-        long credCount = credentialRepository.countByOwner(id);
-        UserProfile userProfile = new UserProfile(user.getId(), user.getName(), user.getName(),
-                user.getCreatedAt(), credCount);
-
-        return userProfile;
+    public Optional<UserProfile> getUserProfile(String id) {
+        return getUserById(id).map(this::profile);
     }
 
-    public List<UserProfile> getUserProfiles() {
-        List<UserProfile> profiles = userRepository.findAll().stream().map(user ->
-            new UserProfile(user.getId(), user.getName(), user.getName(),
-                user.getCreatedAt(), credentialRepository.countByOwner(user.getId())))
+    public List<UserProfile> getUserProfiles(Pageable pageable) {
+        List<UserProfile> profiles = userRepository.findAll(pageable).stream().map(this::profile)
                                              .collect(Collectors.toList());
 
         return profiles;
     }
 
+    /**
+     * Functional to wrap user in profile
+     */
+    private UserProfile profile(User user) {
+        return new UserProfile(user.getId(), user.getName(), user.getName(), user.getCreatedAt(),
+                credentialRepository.countByOwner(user.getId()));
+    }
 }

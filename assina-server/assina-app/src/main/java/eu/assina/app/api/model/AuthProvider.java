@@ -1,4 +1,4 @@
-package eu.assina.app.model;
+package eu.assina.app.api.model;
 
 public enum  AuthProvider {
     local,

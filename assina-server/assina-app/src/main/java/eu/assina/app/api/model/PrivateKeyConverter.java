@@ -1,4 +1,4 @@
-package eu.assina.app.model;
+package eu.assina.app.api.model;
 
 import eu.assina.app.common.config.AppProperties;
 import eu.assina.crypto.pem.KeyPemStringConverter;

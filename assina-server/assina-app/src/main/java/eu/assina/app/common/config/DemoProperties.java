@@ -1,6 +1,6 @@
 package eu.assina.app.common.config;
 
-import eu.assina.app.model.User;
+import eu.assina.app.api.model.User;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;

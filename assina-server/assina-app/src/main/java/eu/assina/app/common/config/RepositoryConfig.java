@@ -1,8 +1,9 @@
 package eu.assina.app.common.config;
 
-import eu.assina.app.model.AuthProvider;
-import eu.assina.app.model.RoleName;
-import eu.assina.app.model.User;
+import eu.assina.app.api.services.CredentialService;
+import eu.assina.app.api.model.AuthProvider;
+import eu.assina.app.api.model.RoleName;
+import eu.assina.app.api.model.User;
 import eu.assina.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,8 @@ class RepositoryConfig {
 	private PasswordEncoder passwordEncoder;
 
 	@Bean
-	CommandLineRunner initRepository(UserRepository userRepo, DemoProperties demoProperties) {
+	CommandLineRunner initRepository(UserRepository userRepo, DemoProperties demoProperties,
+									 CredentialService credentialService) {
 		return args -> {
 			if (userRepo.count() == 0) {
 				User admin = new User("admin", "admin", "admin@assina.eu", AuthProvider.local);
@@ -51,6 +53,11 @@ class RepositoryConfig {
 						user.setRole(demoUser.getRole());
 						userRepo.save(user);
 						log.info("Added demo user {} with role: {}", demoUser.getName(), demoUser.getRole());
+						for (int i = 0; i < demoUser.getNumCredentials(); i++) {
+						    // add credentials for the demo user
+							credentialService.createCredential(user.getId(), user.getUsername());
+							log.info("Created demo credential for user {}", user.getUsername());
+						}
 					}
 				}
 			}

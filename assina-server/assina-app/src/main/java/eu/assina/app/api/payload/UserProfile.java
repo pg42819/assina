@@ -1,4 +1,4 @@
-package eu.assina.app.payload;
+package eu.assina.app.api.payload;
 
 import java.time.Instant;
 

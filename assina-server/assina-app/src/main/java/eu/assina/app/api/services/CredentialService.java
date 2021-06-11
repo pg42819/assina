@@ -2,7 +2,7 @@ package eu.assina.app.api.services;
 
 import eu.assina.app.error.AssinaError;
 import eu.assina.app.error.AssinaException;
-import eu.assina.app.model.AssinaCredential;
+import eu.assina.app.api.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
 import eu.assina.crypto.cert.CertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,10 +83,9 @@ public class CredentialService
 	 */
 	public Page<AssinaCredential> getCredentials(Pageable pageable)
 	{
-		Page<AssinaCredential> byOwner = credentialRepository.findAll(pageable);
-		return byOwner;
+		Page<AssinaCredential> credentials = credentialRepository.findAll(pageable);
+		return credentials;
 	}
-
 
 	public Optional<AssinaCredential> getCredentialWithId(String id) {
 		try {

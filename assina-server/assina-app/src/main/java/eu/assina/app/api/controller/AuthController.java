@@ -1,13 +1,13 @@
 package eu.assina.app.api.controller;
 
 import eu.assina.app.error.BadRequestException;
-import eu.assina.app.model.AuthProvider;
-import eu.assina.app.model.RoleName;
-import eu.assina.app.model.User;
-import eu.assina.app.payload.ApiResponse;
-import eu.assina.app.payload.AuthResponse;
-import eu.assina.app.payload.LoginRequest;
-import eu.assina.app.payload.SignUpRequest;
+import eu.assina.app.api.model.AuthProvider;
+import eu.assina.app.api.model.RoleName;
+import eu.assina.app.api.model.User;
+import eu.assina.app.api.payload.ApiResponse;
+import eu.assina.app.api.payload.AuthResponse;
+import eu.assina.app.api.payload.LoginRequest;
+import eu.assina.app.api.payload.SignUpRequest;
 import eu.assina.app.repository.UserRepository;
 import eu.assina.app.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,12 +1,14 @@
 package eu.assina.app.api.controller;
 
 import eu.assina.app.api.services.UserService;
-import eu.assina.app.model.User;
-import eu.assina.app.payload.UserIdentityAvailability;
-import eu.assina.app.payload.UserProfile;
+import eu.assina.app.api.model.User;
+import eu.assina.app.api.payload.UserIdentityAvailability;
+import eu.assina.app.api.payload.UserProfile;
+import eu.assina.app.error.ResourceNotFoundException;
 import eu.assina.app.security.CurrentUser;
 import eu.assina.app.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +26,10 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('ROLE_USER')")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userService.getUserById(userPrincipal.getId());
+        String id = userPrincipal.getId();
+        User user = userService.getUserById(id)
+                            .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        return user;
     }
 
     @GetMapping("/user/checkUsernameAvailability")
@@ -40,14 +45,15 @@ public class UserController {
     @GetMapping("/users/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserProfile getUserProfile(@PathVariable(value = "id") String id) {
-        UserProfile userProfile = userService.getUserProfile(id);
+        UserProfile userProfile = userService.getUserProfile(id)
+                                          .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         return userProfile;
     }
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<UserProfile> getUsers() {
-        List<UserProfile> userProfiles = userService.getUserProfiles();
+    public List<UserProfile> getUsersPaginated(Pageable pageable) {
+        List<UserProfile> userProfiles = userService.getUserProfiles(pageable);
         return userProfiles;
     }
 }

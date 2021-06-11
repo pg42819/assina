@@ -1,4 +1,4 @@
-package eu.assina.app.model;
+package eu.assina.app.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;

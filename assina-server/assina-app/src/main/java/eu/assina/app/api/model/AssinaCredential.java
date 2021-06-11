@@ -1,9 +1,8 @@
-package eu.assina.app.model;
+package eu.assina.app.api.model;
 
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
@@ -25,12 +24,14 @@ public class AssinaCredential extends DateAudit
 	private String owner;
 	private String description;
 
-	/** store the public key separately from the private key */
+	/** store the public key as a PEM string  */
 	@Convert(converter = PublicKeyConverter.class)
+	@Column(length = 2000)
 	private PublicKey publicKey;
 
-	/** store the private key separately and encrypt it */
+	/** store the private key as a PEM string and encrypt it */
 	@Convert(converter = PrivateKeyConverter.class)
+	@Column(length = 2000)
 	private PrivateKey privateKey;
 
 	@Lob

@@ -1,4 +1,4 @@
-package eu.assina.app.payload;
+package eu.assina.app.api.payload;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

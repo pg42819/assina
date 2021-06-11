@@ -39,6 +39,7 @@ public class CryptoTests {
 		final KeyPemStringConverter converter = new KeyPemStringConverter();
 		String keyString = converter.privateKeyToString(originalKey);
 		System.out.println(keyString);
+		System.out.printf("\nPrivate plain key is this %d chars long\n", keyString.length());
 		// convert back
 		final PrivateKey restoredKey = converter.stringToPrivateKey(keyString);
 		Assert.assertEquals("Expected the private key to be the same after round-trip through string",
@@ -55,6 +56,7 @@ public class CryptoTests {
 		final KeyPemStringConverter converter = new KeyPemStringConverter(passwordChars);
 		String keyString = converter.privateKeyToString(originalKey);
 		System.out.println(keyString);
+		System.out.printf("\nPrivate encrypted key is this %d chars long\n", keyString.length());
 		// convert back
 		final PrivateKey restoredKey = converter.stringToPrivateKey(keyString);
 		Assert.assertEquals("Expected the private key to be the same after round-trip through string",
@@ -74,6 +76,7 @@ public class CryptoTests {
 		String keyString = converter.publicKeyToString(originalKey);
 		System.out.println("String form:");
 		System.out.println(keyString);
+		System.out.printf("\nPublic plain key is this %d chars long\n", keyString.length());
 		final PublicKey restoredKey = converter.stringToPublicKey(keyString);
 		Assert.assertEquals("Expected the public key to be the same after round-trip through string",
 				originalKey, restoredKey);

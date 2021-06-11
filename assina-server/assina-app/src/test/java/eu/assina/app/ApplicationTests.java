@@ -15,7 +15,7 @@
  */
 package eu.assina.app;
 
-import eu.assina.app.model.AssinaCredential;
+import eu.assina.app.api.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
 import eu.assina.app.api.services.CredentialService;
 import org.junit.Assert;
@@ -40,6 +40,8 @@ public class ApplicationTests {
 
 	@Test
 	public void testCredentialCreationAndStorage() {
+		// TODO move this test elsehwer
+		// TODO the first param must be an ID - make a constant ID for bob
 		final AssinaCredential credential = cryptoService.createCredential("bob", "bob");
 		final String id = credential.getId();
 		AssinaCredential loadedCredential = cryptoService.getCredentialWithId(id).get();

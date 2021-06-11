@@ -1,15 +1,16 @@
-package eu.assina.app;
+package eu.assina.app.api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.assina.app.api.controller.CredentialController;
+import eu.assina.app.common.util.Constants;
 import eu.assina.app.error.AssinaError;
-import eu.assina.app.model.AssinaCredential;
+import eu.assina.app.api.model.AssinaCredential;
 import eu.assina.app.api.services.CredentialService;
 import eu.assina.crypto.cert.CertificateGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,14 +28,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // TODO make this match section 11 of the CSC spec
 //    https://stackoverflow.com/questions/50209302/spring-security-rest-unit-tests-fail-with-httpstatuscode-401-unauthorized
-@WebMvcTest(value = CredentialController.class)
+//@WebMvcTest(value = CredentialController.class)
 //    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 //    excludeAutoConfiguration = MockMvcSecurityAutoConfiguration.class)
 //5/22/2021, 4:32:21 PM Deprecate 'secure' on WebMvcTest and AutoConfigureMockMvc · Issue #14227 · spring-projects/spring-boot
 //    https://github.com/spring-projects/spring-boot/issues/14227#issuecomment-688824627
 //@WebAppConfiguration
 //@Import(value = {CredentialController.class, MockMvcAutoConfiguration.class})
-//@EnableConfigurationProperties({ResourceProperties.class, WebMvcProperties.class})
+//@EnablfindAlleConfigurationProperties({ResourceProperties.class, WebMvcProperties.class})
+@AutoConfigureMockMvc
+@SpringBootTest
 class CredentialControllerTest {
 
   static final String USER = "test-subject";
@@ -42,11 +45,11 @@ class CredentialControllerTest {
   static AssinaCredential CREDENTIAL;
 
   private static String credPath() {
-    return "/certs";
+    return Constants.API_URL_ROOT + "/credentials";
   }
 
   private static String credPath(String id) {
-    return "/certs/" + id;
+    return Constants.API_URL_ROOT + "/credentials/" + id;
   }
 
   static {
@@ -73,18 +76,15 @@ class CredentialControllerTest {
   private CredentialService credentialService;
 
   @Test
-  @WithMockUser()
+  @WithMockUser("anyone")
   public void retrieveCredentialById_idFound_200credentialReturned() throws Exception {
     when(credentialService.getCredentialWithId(CREDENTIAL.getId())).thenReturn(Optional.of(CREDENTIAL));
 
-    this.mockMvc.perform(get(credPath(CREDENTIAL.getId())))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(content().json(asJson(CREDENTIAL)));
+    this.mockMvc.perform(get(credPath(CREDENTIAL.getId()))).andDo(print()).andExpect(status().isOk()).andExpect(content().json(asJson(CREDENTIAL)));
   }
 
   @Test
-  @WithMockUser()
+  @WithMockUser("anyone")
   public void retrieveCredentialById_idNotFound_404() throws Exception {
     when(credentialService.getCredentialWithId(CREDENTIAL.getId())).thenReturn(Optional.empty());
     this.mockMvc.perform(get(credPath(CREDENTIAL.getId())))
@@ -94,6 +94,7 @@ class CredentialControllerTest {
   }
 
   @Test
+  @WithMockUser("anyone")
   public void deleteCredential_idFound_204() throws Exception {
     this.mockMvc.perform(delete(credPath(CREDENTIAL.getId())))
         .andDo(print())
@@ -101,6 +102,7 @@ class CredentialControllerTest {
   }
 
   @Test
+  @WithMockUser("anyone")
   public void createCredential_201WithLocationHeaderAndCredentialReturned() throws Exception {
     when(credentialService.createCredential(USER, USER)).thenReturn(CREDENTIAL);
     final MockHttpServletRequestBuilder requestBuilder =

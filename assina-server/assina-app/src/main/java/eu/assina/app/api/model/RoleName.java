@@ -1,4 +1,4 @@
-package eu.assina.app.model;
+package eu.assina.app.api.model;
 
 /**
  * Created by rajeevkumarsingh on 07/12/17.

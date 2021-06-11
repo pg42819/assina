@@ -1,6 +1,6 @@
 package eu.assina.app.common.config;
 
-import eu.assina.app.model.AssinaCredential;
+import eu.assina.app.api.model.AssinaCredential;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ExposureConfiguration;
 import org.springframework.http.HttpMethod;

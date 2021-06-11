@@ -52,7 +52,6 @@ public class CSCCredentialsInfoResponse {
     // Must be 1 or greater 1 A number equal or higher to 1 representing the maximum number of signatures that can be created with this credential with a single authorization request (e.g. by calling credentials/signHash method, as defined in section 11.9,  once with multiple hash values or calling it multiple times). The value of numSignatures specified in the authorization request SHALL NOT exceed the value of this value.
     private long multisign;
 
-
     // OPTIONAL
     // The lang as defined in the Output parameter table in section 11.1.
     private String lang;
