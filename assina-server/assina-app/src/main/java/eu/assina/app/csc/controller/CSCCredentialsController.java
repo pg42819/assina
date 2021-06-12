@@ -1,9 +1,14 @@
 package eu.assina.app.csc.controller;
 
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.csc.error.CSCInvalidRequest;
 import eu.assina.app.csc.payload.*;
 import eu.assina.app.csc.services.CSCCredentialsService;
+import eu.assina.app.security.CurrentUser;
+import eu.assina.app.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -58,8 +63,15 @@ public class CSCCredentialsController
 	 */
 	@PostMapping("list")
 	@ResponseStatus(HttpStatus.OK)
-	public CSCCredentialsListResponse list(CSCCredentialsListRequest listRequest)
+	public CSCCredentialsListResponse list(@CurrentUser UserPrincipal userPrincipal,
+										   CSCCredentialsListRequest listRequest)
 	{
+		// id must be from logged in user only - user-specified
+		if (StringUtils.hasText(listRequest.getUserId())) {
+			throw new ApiException(CSCInvalidRequest.NonNullUserId);
+		}
+		listRequest.setUserId(userPrincipal.getId());
+
 		CSCCredentialsListResponse credentialsList =
 				credentialsService.listCredentials(listRequest);
 		return credentialsList;

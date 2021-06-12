@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.assina.app;
+package eu.assina.app.unit;
 
 import eu.assina.crypto.cert.CertificateGenerator;
 import eu.assina.crypto.pem.KeyPemStringConverter;

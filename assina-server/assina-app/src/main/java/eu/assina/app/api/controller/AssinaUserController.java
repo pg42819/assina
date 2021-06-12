@@ -1,10 +1,11 @@
 package eu.assina.app.api.controller;
 
-import eu.assina.app.api.services.UserService;
 import eu.assina.app.api.model.User;
 import eu.assina.app.api.payload.UserIdentityAvailability;
 import eu.assina.app.api.payload.UserProfile;
-import eu.assina.app.error.ResourceNotFoundException;
+import eu.assina.app.api.services.UserService;
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.api.error.AssinaError;
 import eu.assina.app.security.CurrentUser;
 import eu.assina.app.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class UserController {
+public class AssinaUserController {
 
     @Autowired
     private UserService userService;
@@ -27,8 +28,8 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         String id = userPrincipal.getId();
-        User user = userService.getUserById(id)
-                            .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        User user = userService.getUserById(id).orElseThrow(
+                () -> new ApiException("Failed to find user {}", AssinaError.UserNotFound, id));
         return user;
     }
 
@@ -45,8 +46,8 @@ public class UserController {
     @GetMapping("/users/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserProfile getUserProfile(@PathVariable(value = "id") String id) {
-        UserProfile userProfile = userService.getUserProfile(id)
-                                          .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        UserProfile userProfile = userService.getUserProfile(id).orElseThrow(
+                () -> new ApiException("Failed to find user {}", AssinaError.UserNotFound, id));
         return userProfile;
     }
 

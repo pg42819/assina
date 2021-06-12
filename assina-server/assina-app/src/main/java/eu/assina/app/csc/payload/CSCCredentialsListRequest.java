@@ -19,7 +19,7 @@ public class CSCCredentialsListRequest {
     // The maximum number of items to return from this call.
     // In case this parameter is omitted or invalid  (e.g. the value is too big)
     // the remote service SHALL return its own predefined maximum number of items.
-    private long maxResults;
+    private int maxResults;
 
     // REQUIRED Conditional An opaque token to retrieve a new page of results.
     // The parameter is only REQUIRED to retrieve results other than the first page,
@@ -38,11 +38,11 @@ public class CSCCredentialsListRequest {
         this.userId = userId;
     }
 
-    public long getMaxResults() {
+    public int getMaxResults() {
         return maxResults;
     }
 
-    public void setMaxResults(long maxResults) {
+    public void setMaxResults(int maxResults) {
         this.maxResults = maxResults;
     }
 

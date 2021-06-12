@@ -1,7 +1,8 @@
 package eu.assina.app.security.oauth2;
 
 import eu.assina.app.common.config.AppProperties;
-import eu.assina.app.error.BadRequestException;
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.api.error.AssinaError;
 import eu.assina.app.security.TokenProvider;
 import eu.assina.app.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .map(Cookie::getValue);
 
         if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+            throw new ApiException(AssinaError.OauthUnauthorizedRedirect);
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());

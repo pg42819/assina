@@ -1,14 +1,19 @@
 package eu.assina.app.csc.payload;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  * Body for request of credentials/info - information about a specific credential record
  * of credential IDs
  * From section 11.5 of the CSC API V_1.0.4.0 spec
  */
-public class CSCCredentialsInfoRequest {
+public class CSCCredentialsInfoRequest extends AbstractLangRequest{
 
     // REQUIRED
     // The unique identifier associated to the credential.
+    @NotBlank
     private String credentialID;
 
     // OPTIONAL
@@ -28,18 +33,14 @@ public class CSCCredentialsInfoRequest {
     // of the certificate without having to decode it first.
     // The default value is “false”, so if the parameter is omitted then the information will
     // not be returned.
-    private boolean certInfo;
+    private boolean certInfo = false;
 
     // OPTIONAL
     // Request to return various parameters containing information on the
     // authorization mechanisms supported by this  credential (PIN and OTP groups).
     // The default value is “false”, so if the parameter is omitted then the
     // information will not be returned.
-    private boolean authInfo;
-
-    // OPTIONAL
-    // The lang as defined in the Input parameter table in section 11.1.
-    private String lang;
+    private boolean authInfo = false;
 
     // OPTIONAL
     // String The clientData as defined in the Input parameter table in section 8.3.2.
@@ -75,14 +76,6 @@ public class CSCCredentialsInfoRequest {
 
     public void setAuthInfo(boolean authInfo) {
         this.authInfo = authInfo;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
     }
 
     public String getClientData() {

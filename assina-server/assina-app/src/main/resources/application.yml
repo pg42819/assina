@@ -81,6 +81,9 @@ demo:
       numCredentials: 3
 
 csc:
+  api:
+    pageSize: 20 # if a client does not specify maxResults this is the default page size
+    maxPageSize: 100 # even if a client does specify maxResults we limit it to this to avoid DOS
   info:
     # content used by the CSC info API per 11.1 in the CSC spec
     specs: "1.0.4.0"

@@ -1,12 +1,15 @@
-package eu.assina.app.error;
+package eu.assina.app.api.error;
+
+import eu.assina.app.common.error.ApiError;
 
 /**
  * Enum holding all of the Assina error codes and descriptions
  */
-public enum AssinaError {
+public enum AssinaError implements ApiError {
 
-  CredentialNotFound("Assina-CredentialNotFound",
+  CredentialNotFound("credential_not_found",
           "No credential was found matching this query", 404),
+
   CredentialAlreadyExists("Assina-CredentialAlreadyExists",
           "A credential matching this description already exists", 409),
   CredentialRequestMissingRequiredProperty("Assina-MissingRequiredProperty",
@@ -17,8 +20,18 @@ public enum AssinaError {
       "The object in the request is invalid", 400),
 
   // Failing all else general CredentialStore error
-  UnexpectedError("Assina-UnexpectedError",
-      "An unexpected internal error occurred in the CredentialStore", 500);
+  UnexpectedError("assina_unexpected_error",
+      "An unexpected internal error occurred in the Assina RSSP", 500),
+
+  UserNotFound("user_not_found", "Could not find the requested user in Assina", 404),
+
+  UserEmailAlreadyUsed("already_used",
+          "The username or email address belongs to an existing user", 409),
+
+  OauthUnauthorizedRedirect("unauthorized_redirect", "Sorry! We've got an Unauthorized Redirect " +
+                             "URI and can't proceed wtih authentication", 400),
+  FailedCreatingCredential("failed_creating_credential",
+          "An Error occured while generating certificate and keys", 500);
 
   private final String code;
   private final int httpCode;
@@ -31,15 +44,18 @@ public enum AssinaError {
     this.httpCode = httpCode;
   }
 
+  @Override
   public String getCode() {
     return code;
   }
 
+  @Override
   public int getHttpCode() {
     return httpCode;
   }
 
-  public String getDesc() {
+  @Override
+  public String getDescription() {
     return desc;
   }
 }

@@ -1,6 +1,6 @@
-package eu.assina.app;
+package eu.assina.app.util;
 
-import eu.assina.app.error.AssinaError;
+import eu.assina.app.api.error.AssinaError;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.hamcrest.Matchers.*;
@@ -17,21 +17,28 @@ public class TestResponseMatches {
    * @return a result matcher for error responses
    */
   public static ResultMatcher validErrorResponse() {
-    return validErrorResponse(null);
+    return validateCSCErrorResponse(null);
   }
 
 
   /**
-   * Returns a matcher for asserting a JSON response as a Assina API error.
+   * Returns a matcher for asserting a JSON response as well formed CSC API Error.
+   *
+   * From section 10.1 of CSC spec 1.0.4.0:
+   *   Example error:
+   *   {
+   *     "error": "invalid_request",
+   *     "error_description": "The access token is not valid"
+   *   }
    *
    * @param expectedError the expected error enum; if null is passed, we assert that it is NOT null
    *
    * @return a result matcher for error responses
    */
-  public static ResultMatcher validErrorResponse(AssinaError expectedError) {
+  public static ResultMatcher validateCSCErrorResponse(AssinaError expectedError) {
     return ResultMatcher.matchAll(
-        jsonPath("$.error.code", expectedError == null ? notNullValue() : is(expectedError.getCode())),
-        jsonPath("$.error.desc", notNullValue())
+        jsonPath("$.error", expectedError == null ? notNullValue() : is(expectedError.getCode())),
+        jsonPath("$.error_description", notNullValue())
     );
   }
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  * Manages the current user information for a user logged in via OAuth 2
  */
 //@Controller
-public class OAuthUserController {
+public class AssinaOAuthUserController {
 
 //	@GetMapping("/user")
 //	@ResponseBody

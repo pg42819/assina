@@ -1,4 +1,4 @@
-package eu.assina.app.error;
+package eu.assina.app.api.error;
 
 import org.springframework.security.core.AuthenticationException;
 

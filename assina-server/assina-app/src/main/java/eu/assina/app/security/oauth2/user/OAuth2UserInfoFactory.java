@@ -1,6 +1,6 @@
 package eu.assina.app.security.oauth2.user;
 
-import eu.assina.app.error.OAuth2AuthenticationProcessingException;
+import eu.assina.app.api.error.OAuth2AuthenticationProcessingException;
 import eu.assina.app.api.model.AuthProvider;
 
 import java.util.Map;

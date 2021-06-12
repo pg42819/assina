@@ -1,7 +1,7 @@
 package eu.assina.app.api.services;
 
-import eu.assina.app.error.AssinaError;
-import eu.assina.app.error.AssinaException;
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.api.error.AssinaError;
 import eu.assina.app.api.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
 import eu.assina.crypto.cert.CertificateGenerator;
@@ -50,7 +50,7 @@ public class CredentialService
 			return credential;
 		}
 		catch (Exception e) {
-			throw new AssinaException("Problem generating key pair and cert", e, AssinaError.UnexpectedError);
+			throw new ApiException(AssinaError.FailedCreatingCredential, e);
 		}
 	}
 
@@ -88,13 +88,7 @@ public class CredentialService
 	}
 
 	public Optional<AssinaCredential> getCredentialWithId(String id) {
-		try {
-			return credentialRepository.findById(id);
-		}
-		catch (EmptyResultDataAccessException ex) {
-			throw new AssinaException("Attempted to get credentials that do not exist",
-					id, AssinaError.CredentialNotFound);
-		}
+		return credentialRepository.findById(id);
 	}
 
 	/**
@@ -107,8 +101,8 @@ public class CredentialService
 			credentialRepository.deleteById(id);
 		}
 		catch (EmptyResultDataAccessException ex) {
-			throw new AssinaException("Attempted to delete credentials that do not exist",
-					id, AssinaError.CredentialNotFound);
+			throw new ApiException("Attempted to delete credentials that do not exist",
+					AssinaError.CredentialNotFound, id);
 		}
 	}
 }

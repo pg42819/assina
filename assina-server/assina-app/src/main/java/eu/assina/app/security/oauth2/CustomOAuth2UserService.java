@@ -1,6 +1,6 @@
 package eu.assina.app.security.oauth2;
 
-import eu.assina.app.error.OAuth2AuthenticationProcessingException;
+import eu.assina.app.api.error.OAuth2AuthenticationProcessingException;
 import eu.assina.app.api.model.AuthProvider;
 import eu.assina.app.api.model.User;
 import eu.assina.app.repository.UserRepository;

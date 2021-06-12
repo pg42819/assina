@@ -1,6 +1,7 @@
 package eu.assina.app.api.controller;
 
-import eu.assina.app.error.BadRequestException;
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.api.error.AssinaError;
 import eu.assina.app.api.model.AuthProvider;
 import eu.assina.app.api.model.RoleName;
 import eu.assina.app.api.model.User;
@@ -28,7 +29,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AssinaAuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -61,11 +62,13 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getName())) {
-            throw new BadRequestException("Username already in use.");
+            throw new ApiException("Username {} already in use.",
+            AssinaError.UserEmailAlreadyUsed, signUpRequest.getName());
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+            throw new ApiException("Email address {} already in use.",
+                    AssinaError.UserEmailAlreadyUsed, signUpRequest.getEmail());
         }
 
         // Creating user's account

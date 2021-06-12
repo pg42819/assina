@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.assina.app;
+package eu.assina.app.api.service;
 
 import eu.assina.app.api.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
@@ -30,21 +30,21 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class ApplicationTests {
+public class CredentialServiceTest {
 
 	@Autowired
 	CredentialRepository credentialRepository;
 
 	@Autowired
-	CredentialService cryptoService;
+	CredentialService credentialService;
 
 	@Test
 	public void testCredentialCreationAndStorage() {
 		// TODO move this test elsehwer
 		// TODO the first param must be an ID - make a constant ID for bob
-		final AssinaCredential credential = cryptoService.createCredential("bob", "bob");
+		final AssinaCredential credential = credentialService.createCredential("bob", "bob");
 		final String id = credential.getId();
-		AssinaCredential loadedCredential = cryptoService.getCredentialWithId(id).get();
+		AssinaCredential loadedCredential = credentialService.getCredentialWithId(id).get();
 		Assert.assertEquals("Expected the credentials loaded to be equal to those saved",
 				credential, loadedCredential);
 
@@ -53,5 +53,9 @@ public class ApplicationTests {
 		final boolean foundNewCreds = bobsCreds.stream().anyMatch(credential::equals);
 		Assert.assertTrue("Expected to find the newly created creds in a search of all creds belonging to bob",
 				foundNewCreds);
+
+		credentialService.deleteCredentials(id);
+		Assert.assertFalse("Expected credential to be deleted",
+				credentialService.getCredentialWithId(id).isPresent());
 	}
 }
