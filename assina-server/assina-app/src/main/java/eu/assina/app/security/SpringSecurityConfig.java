@@ -1,9 +1,6 @@
-package eu.assina.app.common.config;
+package eu.assina.app.security;
 
-import eu.assina.app.security.CustomUserDetailsService;
-import eu.assina.app.security.RestAuthenticationEntryPoint;
-import eu.assina.app.security.TokenAuthenticationFilter;
-import eu.assina.app.security.oauth2.CustomOAuth2UserService;
+import eu.assina.app.security.oauth2.AssinaOAuth2UserService;
 import eu.assina.app.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import eu.assina.app.security.oauth2.OAuth2AuthenticationFailureHandler;
 import eu.assina.app.security.oauth2.OAuth2AuthenticationSuccessHandler;
@@ -22,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static eu.assina.app.common.util.Constants.API_URL_ROOT;
 import static eu.assina.app.common.util.Constants.CSC_URL_ROOT;
 
 @Configuration
@@ -38,7 +34,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+    private AssinaOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -113,7 +109,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers(API_URL_ROOT + "/auth/**", API_URL_ROOT + "/oauth2/**")
+                    .antMatchers("/auth/**", "/oauth2/**") // permit local login
                         .permitAll()
                     // add open access to the root /info - TODO not mentioned in the spec - should it be permitted?
                     .antMatchers(CSC_URL_ROOT + "/info").permitAll()

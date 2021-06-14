@@ -1,4 +1,4 @@
-package eu.assina.app.api.controller;
+package eu.assina.app.security;
 
 import eu.assina.app.common.error.ApiException;
 import eu.assina.app.api.error.AssinaError;

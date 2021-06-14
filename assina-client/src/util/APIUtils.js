@@ -1,4 +1,4 @@
-import { API_BASE_URL, CSC_BASE_URL, ACCESS_TOKEN } from '../constants';
+import { ASSINA_RSSP_BASE_URL, API_BASE_URL, CSC_BASE_URL, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -36,7 +36,7 @@ export function getCurrentUser() {
 
 export function login(loginRequest) {
     return request({
-        url: API_BASE_URL + "/auth/login",
+        url: ASSINA_RSSP_BASE_URL + "/auth/login",
         method: 'POST',
         body: JSON.stringify(loginRequest)
     });
@@ -44,7 +44,7 @@ export function login(loginRequest) {
 
 export function signup(signupRequest) {
     return request({
-        url: API_BASE_URL + "/auth/signup",
+        url: ASSINA_RSSP_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
     });
