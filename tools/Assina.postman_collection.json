@@ -232,19 +232,14 @@
 			"response": []
 		},
 		{
-			"name": "info",
+			"name": "CSC Info",
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "username",
-							"value": "admin@assina.eu",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "admin",
+							"key": "token",
+							"value": "{{user-token}}",
 							"type": "string"
 						}
 					]
@@ -265,6 +260,41 @@
 						"csc",
 						"v1",
 						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CSC List Credentials",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/csc/v1/credentials/list",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"csc",
+						"v1",
+						"credentials",
+						"list"
 					]
 				}
 			},
