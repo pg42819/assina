@@ -57,7 +57,8 @@ class SignupForm extends Component {
             name: '',
             username: '',
             email: '',
-            password: ''
+            password: '',
+            pin: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -109,6 +110,10 @@ class SignupForm extends Component {
                     <input type="password" name="password"
                         className="form-control" placeholder="Password"
                         value={this.state.password} onChange={this.handleInputChange} required/>
+                </div>
+                <div className="form-item">
+                    <input type="password" pattern="[0-9]*" name="pin" className="form-control" placeholder="Pin"
+                            value={this.state.pin} onChange={this.handleInputChange} required/>
                 </div>
                 <div className="form-item">
                     <button type="submit" className="btn btn-block btn-primary" >Sign Up</button>

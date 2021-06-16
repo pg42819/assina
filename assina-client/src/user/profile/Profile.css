@@ -2,7 +2,15 @@
     padding-top: 30px;
 }
 
+.file-upload {
+    text-align: center;
+}
+
 .profile-info {
+    text-align: center;
+}
+
+.sign-document {
     text-align: center;
 }
 
