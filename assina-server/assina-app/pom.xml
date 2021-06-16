@@ -14,12 +14,6 @@
     <name>assina-app</name>
 
     <dependencies>
-        <dependency>
-            <groupId>eu.assina</groupId>
-            <artifactId>assina-crypto</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- Use spring-boot starter dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
