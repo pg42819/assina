@@ -27,13 +27,13 @@ class Profile extends Component {
                            <p className="profile-email">{this.props.currentUser.email}</p>
                         </div>
                     </div>
-                    <div>
-                        <input type="file" name="file"  />
-                        <div>
-                            <button >Submit</button>
+                        <div className="file-upload">
+                            <input id="fileButton" type="file" hidden />
+                            <button onClick={this.fileUploadButton}>
+                                Upload file
+                            </button>
                         </div>
-                    </div>
-                </div>    
+                    </div> 
             </div>
         );
     }
