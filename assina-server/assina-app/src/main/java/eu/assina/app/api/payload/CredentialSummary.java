@@ -7,16 +7,14 @@ public class CredentialSummary {
     private String ownerUsername;
     private String ownerName;
     private Instant createdAt;
-    private String type;
     private String description;
 
     public CredentialSummary(String id, String ownerUsername, String ownerName, Instant createdAt,
-                             String type, String description) {
+                             String description) {
         this.id = id;
         this.ownerUsername = ownerUsername;
         this.ownerName = ownerName;
         this.createdAt = createdAt;
-        this.type = type;
         this.description = description;
     }
 
@@ -30,10 +28,6 @@ public class CredentialSummary {
 
     public Instant getCreatedAt() {
         return createdAt;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public String getDescription() {

@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
  *   authorization web page in the language declared by the header value, if supported.
  *   The authorization server SHALL render the web page in its own preferred language otherwise.
  */
-public abstract class AbstractLangRequest {
+public abstract class AbstractLangRequest implements CSCRequest {
     private static final Logger log = LoggerFactory.getLogger(AbstractLangRequest.class);
 
     // OPTIONAL

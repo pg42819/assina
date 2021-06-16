@@ -9,13 +9,13 @@ public class ApiException extends RuntimeException {
 		this.apiError = apiError;
 	}
 
-	public ApiException(String message, ApiError apiError, String... args) {
+	public ApiException(ApiError apiError, String message, String... args) {
 		super(message);
 		this.apiError = apiError;
 		this.messageParams = args;
 	}
 
-	public ApiException(String message, ApiError apiError, Exception cause) {
+	public ApiException(ApiError apiError, String message, Exception cause) {
 		super(message, cause);
 		this.apiError = apiError;
 	}

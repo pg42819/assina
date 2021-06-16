@@ -1,8 +1,11 @@
 package eu.assina.app.csc.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.csc.error.CSCInvalidRequest;
+import org.springframework.util.StringUtils;
+
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * Body for request of credentials/info - information about a specific credential record
@@ -10,6 +13,13 @@ import javax.validation.constraints.NotNull;
  * From section 11.5 of the CSC API V_1.0.4.0 spec
  */
 public class CSCCredentialsInfoRequest extends AbstractLangRequest{
+
+    public CSCCredentialsInfoRequest() {
+        System.out.println("created");
+    }
+
+    // Allowed values for the certificates attribute: not used in payload but derived in validation
+    public enum CertsRequest { none, single, chain }
 
     // REQUIRED
     // The unique identifier associated to the credential.
@@ -24,7 +34,12 @@ public class CSCCredentialsInfoRequest extends AbstractLangRequest{
     //  • “chain”: The full certificate chain SHALL be returned.
     // The default value is “single”, so if the parameter is omitted then the method will
     // only return the end entity certificate.
-    String certificates;
+    private String certificates;
+
+    // converts the certficates above to an enum (see validation below)
+    @JsonIgnore
+    private CertsRequest _certsRequest;
+
 
     // OPTIONAL
     // Request to return various parameters containing information from the end entity
@@ -85,4 +100,32 @@ public class CSCCredentialsInfoRequest extends AbstractLangRequest{
     public void setClientData(String clientData) {
         this.clientData = clientData;
     }
+
+    /**
+     * Fail if the request does not match the standard - according to CSC spec 11.5
+     */
+    public void validate() {
+        if (StringUtils.hasText(certificates)) {
+            try {
+                _certsRequest = CertsRequest.valueOf(certificates);
+            } catch (IllegalArgumentException e) {
+                // certificates was not one of none, single or chain, which is an error
+                throw new ApiException(CSCInvalidRequest.InvalidCertificatesParameter);
+            }
+        }
+        else{
+            // certificates is optional and defaults to single
+            _certsRequest = CertsRequest.single;
+        }
+
+        if (!StringUtils.hasText(credentialID)) {
+            throw new ApiException(CSCInvalidRequest.MissingCredentialId);
+        }
+    }
+
+    /** helper to convert the string certificates property to an enum */
+    public CertsRequest getCertsRequest() {
+        return _certsRequest;
+    }
+
 }

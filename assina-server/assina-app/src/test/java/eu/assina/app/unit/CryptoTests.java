@@ -15,9 +15,11 @@
  */
 package eu.assina.app.unit;
 
-import eu.assina.crypto.cert.CertificateGenerator;
-import eu.assina.crypto.pem.KeyPemStringConverter;
+import eu.assina.app.crypto.CertificateGenerator;
+import eu.assina.app.crypto.CryptoConfig;
+import eu.assina.app.crypto.PemConverter;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,18 +27,32 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //@SpringBootTest
 public class CryptoTests {
 
+	private static CryptoConfig config = null;
+
+
+	@BeforeClass
+	public static void prep() {
+		config = new CryptoConfig();
+		config.setKeyAlgorithm("RSA");
+		config.setKeySize(2048);
+		config.setMonthsValidity(1);
+		config.setSignatureAlgorithm("SHA256WithRSA");
+		config.setPassphrase("test-pass");
+	}
+
 	@Test
 	public void testPrivateKeyRoundTrip() throws Exception {
-		CertificateGenerator generator = new CertificateGenerator();
+		CertificateGenerator generator = new CertificateGenerator(config);
 		final KeyPair keyPair = generator.generateKeyPair();
 		final PrivateKey originalKey = keyPair.getPrivate();
 
-		final KeyPemStringConverter converter = new KeyPemStringConverter();
+		final PemConverter converter = new PemConverter(config);
 		String keyString = converter.privateKeyToString(originalKey);
 		System.out.println(keyString);
 		System.out.printf("\nPrivate plain key is this %d chars long\n", keyString.length());
@@ -48,12 +64,11 @@ public class CryptoTests {
 
     @Test
     public void testEncryptedPrivateKeyRoundTrip() throws Exception {
-		CertificateGenerator generator = new CertificateGenerator();
+		CertificateGenerator generator = new CertificateGenerator(config);
         final KeyPair keyPair = generator.generateKeyPair();
         final PrivateKey originalKey = keyPair.getPrivate();
 
-		final char[] passwordChars = "test-password".toCharArray();
-		final KeyPemStringConverter converter = new KeyPemStringConverter(passwordChars);
+		final PemConverter converter = new PemConverter(config);
 		String keyString = converter.privateKeyToString(originalKey);
 		System.out.println(keyString);
 		System.out.printf("\nPrivate encrypted key is this %d chars long\n", keyString.length());
@@ -65,20 +80,37 @@ public class CryptoTests {
 
 	@Test
 	public void testPublicKeyRoundTrip() throws Exception {
-		CertificateGenerator generator = new CertificateGenerator();
+		CertificateGenerator generator = new CertificateGenerator(config);
 		final KeyPair keyPair = generator.generateKeyPair();
 		final PublicKey originalKey = keyPair.getPublic();
 
-		final char[] passwordChars = "test-password".toCharArray();
 		// password should be ignored
-		final KeyPemStringConverter converter = new KeyPemStringConverter(passwordChars);
+		final PemConverter converter = new PemConverter(config);
 
 		String keyString = converter.publicKeyToString(originalKey);
 		System.out.println("String form:");
 		System.out.println(keyString);
-		System.out.printf("\nPublic plain key is this %d chars long\n", keyString.length());
+		System.out.printf("\nPublic plain key is %d chars long\n", keyString.length());
 		final PublicKey restoredKey = converter.stringToPublicKey(keyString);
 		Assert.assertEquals("Expected the public key to be the same after round-trip through string",
 				originalKey, restoredKey);
 	}
+
+	@Test
+	public void testCertificateRoundTrip() throws Exception {
+		CertificateGenerator generator = new CertificateGenerator(config);
+		final KeyPair keyPair = generator.generateKeyPair();
+		final X509Certificate originalCert = generator.createSelfSignedCert(keyPair, "test-subject");
+		final PemConverter converter = new PemConverter(config);
+
+		String pemCertificate = converter.certificateToString(originalCert);
+		System.out.println("String form:");
+		System.out.println(pemCertificate);
+		System.out.printf("\nCertificate is %d chars long\n", pemCertificate.length());
+		final X509Certificate restoredCert = converter.stringToCertificate(pemCertificate);
+		Assert.assertEquals("Expected the cert to be the same after round-trip through string",
+				originalCert, restoredCert);
+	}
+
+	// TODO add signhash and verify
 }

@@ -1,4 +1,17 @@
-package eu.assina.crypto.bouncycastle;
+package eu.assina.app.crypto;
+
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.cms.ContentInfo;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaCertStore;
+import org.bouncycastle.cms.*;
+import org.bouncycastle.cms.jcajce.*;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.OutputEncryptor;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
+import org.bouncycastle.util.Store;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,53 +24,62 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.cms.ContentInfo;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.jcajce.JcaCertStore;
-import org.bouncycastle.cms.CMSAlgorithm;
-import org.bouncycastle.cms.CMSEnvelopedData;
-import org.bouncycastle.cms.CMSEnvelopedDataGenerator;
-import org.bouncycastle.cms.CMSException;
-import org.bouncycastle.cms.CMSProcessableByteArray;
-import org.bouncycastle.cms.CMSSignedData;
-import org.bouncycastle.cms.CMSSignedDataGenerator;
-import org.bouncycastle.cms.CMSTypedData;
-import org.bouncycastle.cms.KeyTransRecipientInformation;
-import org.bouncycastle.cms.RecipientInformation;
-import org.bouncycastle.cms.SignerInformation;
-import org.bouncycastle.cms.SignerInformationStore;
-import org.bouncycastle.cms.jcajce.JcaSignerInfoGeneratorBuilder;
-import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
-import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
-import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
-import org.bouncycastle.cms.jcajce.JceKeyTransRecipient;
-import org.bouncycastle.cms.jcajce.JceKeyTransRecipientInfoGenerator;
-import org.bouncycastle.operator.ContentSigner;
-import org.bouncycastle.operator.OperatorCreationException;
-import org.bouncycastle.operator.OutputEncryptor;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
-import org.bouncycastle.util.Store;
+/**
+ * Utility for signing data like document hashes
+ */
+public class CryptoSigner {
 
-public class BouncyCastleCrypto {
+    private CryptoConfig config;
 
-    public static byte[] signData(byte[] data, final X509Certificate signingCertificate, final PrivateKey signingKey) throws CertificateEncodingException, OperatorCreationException, CMSException, IOException {
+    public CryptoSigner(CryptoConfig config) {
+        this.config = config;
+    }
+
+    /**
+     * Cryptographically sign the given data with the supplied signature and private key
+     *
+     * @param data data to sign (usually a document hash)
+     * @param signingCertificate certificate with which to sign the hash (contains the public key)
+     * @param signingKey private key paired to the public key in the signing certificate
+     * @return signature for provided data
+     *
+     * @throws CertificateEncodingException
+     * @throws OperatorCreationException
+     * @throws CMSException
+     * @throws IOException
+     */
+    public byte[] signData(byte[] data, final X509Certificate signingCertificate, final PrivateKey signingKey)
+            throws CertificateEncodingException, OperatorCreationException, CMSException, IOException {
         byte[] signedMessage = null;
         List<X509Certificate> certList = new ArrayList<X509Certificate>();
         CMSTypedData cmsData = new CMSProcessableByteArray(data);
         certList.add(signingCertificate);
         Store certs = new JcaCertStore(certList);
         CMSSignedDataGenerator cmsGenerator = new CMSSignedDataGenerator();
-        ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withRSA").build(signingKey);
-        cmsGenerator.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(new JcaDigestCalculatorProviderBuilder().setProvider("BC").build()).build(contentSigner, signingCertificate));
+
+        String signatureAlgorithm = config.getSignatureAlgorithm();
+        ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm).build(signingKey);
+
+        cmsGenerator.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(
+                new JcaDigestCalculatorProviderBuilder().setProvider("BC").build())
+                                                    .build(contentSigner, signingCertificate));
         cmsGenerator.addCertificates(certs);
         CMSSignedData cms = cmsGenerator.generate(cmsData, true);
         signedMessage = cms.getEncoded();
         return signedMessage;
     }
 
-    public static boolean verifSignData(final byte[] signedData) throws CMSException, IOException, OperatorCreationException, CertificateException {
+    /**
+     * Verfies thhe signed data
+     * @param signedData
+     * @return
+     * @throws CMSException
+     * @throws IOException
+     * @throws OperatorCreationException
+     * @throws CertificateException
+     */
+    public boolean verifSignData(final byte[] signedData) throws CMSException, IOException, OperatorCreationException, CertificateException {
+        // TODO remove this or pass in the certs
         ByteArrayInputStream bIn = new ByteArrayInputStream(signedData);
         ASN1InputStream aIn = new ASN1InputStream(bIn);
         CMSSignedData s = new CMSSignedData(ContentInfo.getInstance(aIn.readObject()));
@@ -77,7 +99,9 @@ public class BouncyCastleCrypto {
         return true;
     }
 
-    public static byte[] encryptData(final byte[] data, X509Certificate encryptionCertificate) throws CertificateEncodingException, CMSException, IOException {
+    // TODO remove this encrypter if we don't end up using it
+    public byte[] encryptData(final byte[] data, X509Certificate encryptionCertificate)
+            throws CertificateEncodingException, CMSException, IOException {
         byte[] encryptedData = null;
         if (null != data && null != encryptionCertificate) {
             CMSEnvelopedDataGenerator cmsEnvelopedDataGenerator = new CMSEnvelopedDataGenerator();
@@ -91,7 +115,7 @@ public class BouncyCastleCrypto {
         return encryptedData;
     }
 
-    public static byte[] decryptData(final byte[] encryptedData, final PrivateKey decryptionKey) throws CMSException {
+    public byte[] decryptData(final byte[] encryptedData, final PrivateKey decryptionKey) throws CMSException {
         byte[] decryptedData = null;
         if (null != encryptedData && null != decryptionKey) {
             CMSEnvelopedData envelopedData = new CMSEnvelopedData(encryptedData);

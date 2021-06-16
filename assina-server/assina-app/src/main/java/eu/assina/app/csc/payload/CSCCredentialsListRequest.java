@@ -1,10 +1,14 @@
 package eu.assina.app.csc.payload;
 
+import com.nimbusds.oauth2.sdk.AbstractRequest;
+import eu.assina.app.common.util.Constants;
+import org.springframework.util.StringUtils;
+
 /**
  * Body for request of credentials/list - a list, possibly paginated, of credential IDs
  * From section 11.4 of the CSC API V_1.0.4.0 spec
  */
-public class CSCCredentialsListRequest {
+public class CSCCredentialsListRequest implements CSCRequest {
 
     // REQUIRED Conditional
     // The identifier associated to the identity of the credential owner.
@@ -61,4 +65,5 @@ public class CSCCredentialsListRequest {
     public void setClientData(String clientData) {
         this.clientData = clientData;
     }
+
 }

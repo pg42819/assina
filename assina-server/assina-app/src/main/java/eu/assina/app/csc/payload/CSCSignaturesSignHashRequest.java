@@ -1,5 +1,9 @@
 package eu.assina.app.csc.payload;
 
+import eu.assina.app.common.error.ApiException;
+import eu.assina.app.csc.error.CSCInvalidRequest;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 
 /**
@@ -100,4 +104,23 @@ public class CSCSignaturesSignHashRequest {
     public void setClientData(String clientData) {
         this.clientData = clientData;
     }
+
+    /**
+     * Fail if the request does not match the standard - according to CSC spec 11.9
+     */
+    public void validate() {
+        if (!StringUtils.hasText(credentialID)) {
+            throw new ApiException(CSCInvalidRequest.MissingCredentialId);
+        }
+        if (!StringUtils.hasText(SAD)) {
+            throw new ApiException(CSCInvalidRequest.MissingSAD);
+        }
+        if (hash == null || hash.isEmpty()) {
+            throw new ApiException(CSCInvalidRequest.InvalidHashArray);
+        }
+        if (!StringUtils.hasText(signAlgo)) {
+            throw new ApiException(CSCInvalidRequest.MissingSignAlgo);
+        }
+    }
+
 }

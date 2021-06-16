@@ -58,7 +58,6 @@ assina:
   auth: # todo generate a token secret to share with the client side
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
     tokenExpirationMsec: 864000000
-    passphrase: foo
   oauth2:
     # Redirect to webapp with our own JWT token after authenticating with oauth2 provider
     # TODO set this to the actual URL of the web app
@@ -81,6 +80,18 @@ demo:
       numCredentials: 3
 
 csc:
+  # crypto properties are used for key and cert generation and encryption
+  crypto:
+    # we issue our own certs for now
+    issuer: assina.eu
+    keyAlgorithm: RSA
+    keySize: 2048
+    monthsValidity: 12
+    # Signature algorithm must work with the key algo above
+    signatureAlgorithm: SHA256WithRSA
+    # Passphrase used for encrypting private key at rest in the database
+    # WARNING: This should be overridden with the (more secure) env var: CSC_CRYPTO_PASSPHRASE
+    passphrase: foo
   api:
     pageSize: 20 # if a client does not specify maxResults this is the default page size
     maxPageSize: 100 # even if a client does specify maxResults we limit it to this to avoid DOS

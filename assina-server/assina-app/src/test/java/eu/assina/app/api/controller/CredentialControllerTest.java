@@ -3,12 +3,11 @@ package eu.assina.app.api.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.assina.app.api.payload.CredentialSummary;
-import eu.assina.app.common.util.Constants;
-import eu.assina.app.api.error.AssinaError;
-import eu.assina.app.api.model.AssinaCredential;
 import eu.assina.app.api.services.CredentialService;
+import eu.assina.app.common.error.AssinaError;
+import eu.assina.app.common.model.AssinaCredential;
+import eu.assina.app.common.util.Constants;
 import eu.assina.app.util.TestResponseMatches;
-import eu.assina.crypto.cert.CertificateGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +18,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.KeyPair;
-import java.security.cert.Certificate;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // TODO make this match section 11 of the CSC spec
 //    https://stackoverflow.com/questions/50209302/spring-security-rest-unit-tests-fail-with-httpstatuscode-401-unauthorized
@@ -59,15 +59,13 @@ public class CredentialControllerTest {
 
   static {
     try {
-      CertificateGenerator generator = new CertificateGenerator();
-      final KeyPair keyPair = generator.generateKeyPair();
-      final Certificate selfSignedCert = generator.createSelfSignedCert(keyPair, USER);
       CREDENTIAL = new AssinaCredential();
       CREDENTIAL.setId(CREDENTIAL_ID);
       CREDENTIAL.setOwner(USER);
-      CREDENTIAL.setCertificate(selfSignedCert);
-      CREDENTIAL.setPublicKey(keyPair.getPublic());
-      CREDENTIAL.setPrivateKey(keyPair.getPrivate());
+      CREDENTIAL.setCertificate("mock-cert");
+      CREDENTIAL.setPublicKey("mock-public-key");
+      CREDENTIAL.setPrivateKey("mock-private-key");
+      CREDENTIAL.setCreatedAt(Instant.now());
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

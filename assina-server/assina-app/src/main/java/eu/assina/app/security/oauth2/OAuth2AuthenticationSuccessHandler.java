@@ -2,7 +2,7 @@ package eu.assina.app.security.oauth2;
 
 import eu.assina.app.common.config.AppProperties;
 import eu.assina.app.common.error.ApiException;
-import eu.assina.app.api.error.AssinaError;
+import eu.assina.app.common.error.AssinaError;
 import eu.assina.app.security.TokenProvider;
 import eu.assina.app.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;

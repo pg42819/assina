@@ -15,7 +15,7 @@
  */
 package eu.assina.app.api.service;
 
-import eu.assina.app.api.model.AssinaCredential;
+import eu.assina.app.common.model.AssinaCredential;
 import eu.assina.app.repository.CredentialRepository;
 import eu.assina.app.api.services.CredentialService;
 import org.junit.Assert;

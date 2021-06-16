@@ -7,8 +7,7 @@ import eu.assina.app.common.error.ApiError;
  */
 public enum CSCInvalidRequest implements ApiError {
 
-  MissingBearer("The request is missing a required parameter, includes an invalid parameter " +
-                        "value, includes a parameter more than once, or is otherwise malformed."),
+  MissingBearer("The request is missing a required parameter, includes an invalid parameter " + "value, includes a parameter more than once, or is otherwise malformed."),
 
   InvalidPageToken("Invalid parameter pageToken"),
 
@@ -25,13 +24,33 @@ public enum CSCInvalidRequest implements ApiError {
   // Should not be needed since we use user-specified authorization
   InvalidUserId("Invalid parameter userID"),
 
-  //
+  // Credential errors
   // From 10.5 of the CSC Spec for credentials/info
-  //
   MissingCredentialId("Missing (or invalid type) string parameter credentialID"),
   InvalidCredentialId("Invalid parameter credentialID"),
-  InvalidCertificatesParameer("Invalid parameter certificates");
+  InvalidCertificatesParameter("Invalid parameter certificates"),
 
+  // SignHash Errors
+  // From 11.9 of the CSC for signatures/signHash
+  MissingSAD("Missing (or invalid type) string parameter SAD"),
+  InvalidSAD("Invalid parameter SAD"),
+  InvalidHashArray("Missing (or invalid type) array parameter hash"),
+  InvalidHashParameter("Invalid Base64 hash string parameter"),
+  HashNotAuthorizedBySAD("Hash is not authorized by the SAD"),
+  MissingSignAlgo("Missing (or invalid type) string parameter signAlgo"),
+  MissingSignAlogParams("Missing (or invalid type) string parameter signAlgoParams"),
+  // Missing or not String “hashAlgo” parameter when “signAlgo” is equal to “1.2.840.113549.1.1.1”
+  MissingHashAlgo("Missing (or invalid type) string parameter hashAlgo"),
+  InvalidHashAlgo("Invalid parameter hashAlgo"),
+  InvalidSignAlgo("Invalid parameter signAlgo"),
+  InvalidClientData("Invalid parameter clientData"),
+  // Invalid “hash” length
+  InvalidHashLength("Invalid digest value length"),
+  InvalidOTP("The OTP is invalid"),
+  SADExpired("SAD expired"),
+
+  // TODO looks like it needs to be parameterized but this could cause reflected XSS
+  Invalid("Signing certificate 'O=[organization],CN=[common_name]' is expired");
 
 
   private String description;

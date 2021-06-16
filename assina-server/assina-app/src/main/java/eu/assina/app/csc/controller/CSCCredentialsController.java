@@ -78,8 +78,60 @@ public class CSCCredentialsController
 	}
 
 	/**
-	 * Example request:
+	 * Returns info about specified credential object
 	 *
+	 * Example request
+	 *   POST /csc/v1/credentials/info HTTP/1.1
+	 *   Host: service.domain.org
+	 *   Authorization: Bearer 4/CKN69L8gdSYp5_pwH3XlFQZ3ndFhkXf9P2_TiHRG-bA
+	 *   Content-Type: application/json
+	 *   {
+	 *     "credentialID": "GX0112348",
+	 *     "certificates": "single",
+	 *     "certInfo": true,
+	 *     "authInfo": true
+	 *   }
+	 *
+	 * Example response:
+	 *   HTTP/1.1 200 OK
+	 *   Content-Type: application/json;charset=UTF-8
+	 *   {
+	 *     "key": {
+	 *       "status": "enabled",
+	 *       "algo": [ "1.2.840.113549.1.1.1", "0.4.0.127.0.7.1.1.4.1.3" ],     "len": 2048   },
+	 *       "cert":  {
+	 *         "status": "valid",
+	 *         "certificates":
+	 *         [
+	 *           "<Base64-encoded_X.509_end_entity_certificate>",
+	 *           "<Base64-encoded_X.509_intermediate_CA_certificate>",
+	 *           "<Base64-encoded_X.509_root_CA_certificate>"
+	 *         ],
+	 *         "issuerDN": "<X.500_issuer_DN_printable_string>",
+	 *         "serialNumber": "5AAC41CD8FA22B953640",
+	 *         "subjectDN": "<X.500_subject_DN_printable_string>",
+	 *         "validFrom": "20180101100000Z",
+	 *         "validTo": "20190101095959Z"
+	 *      },
+	 *      "authMode": "explicit",
+	 *      "PIN": {
+	 *        "presence": "true",
+	 *        "format": "N",
+	 *        "label": "PIN",
+	 *        "description": "Please enter the signature PIN"
+	 *       },
+	 *       "OTP": {
+	 *         "presence": "true",
+	 *         "type": "offline",
+	 *         "ID": "MB01-K741200",
+	 *         "provider": "totp",
+	 *         "format": "N",
+	 *         "label": "Mobile OTP",
+	 *         "description": "Please enter the 6 digit code you received by SMS"
+	 *       },
+	 *      "multisign": 5,
+	 *      "lang": "en-US"
+	 *    }
 	 * @param infoRequest
 	 */
 	@PostMapping("info")

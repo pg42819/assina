@@ -1,6 +1,6 @@
 package eu.assina.app.util;
 
-import eu.assina.app.api.error.AssinaError;
+import eu.assina.app.common.error.AssinaError;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.hamcrest.Matchers.*;

@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.when;
+
 //@RunWith(SpringRunner.class)
 //@WebMvcTest(CSCInfoController.class)
 //@ContextConfiguration
@@ -29,8 +31,8 @@ public class CSCCredentialControllerTest {
 
   @Test
   @WithMockUser("anyone")
-  public void listCrededntials_200Returned() throws Exception {
-//    when(credentialsService.getCredentialsInfo().thenReturn(INFO);
+  public void listCredentials_200Returned() throws Exception {
+//    when(credentialsService.listCredentials().thenReturn(INFO);
 //
 //    this.mockMvc.perform(post("/info/"))
 //        .andDo(print())

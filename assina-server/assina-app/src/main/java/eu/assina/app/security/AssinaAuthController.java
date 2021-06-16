@@ -1,7 +1,7 @@
 package eu.assina.app.security;
 
 import eu.assina.app.common.error.ApiException;
-import eu.assina.app.api.error.AssinaError;
+import eu.assina.app.common.error.AssinaError;
 import eu.assina.app.api.model.AuthProvider;
 import eu.assina.app.api.model.RoleName;
 import eu.assina.app.api.model.User;
@@ -10,7 +10,6 @@ import eu.assina.app.api.payload.AuthResponse;
 import eu.assina.app.api.payload.LoginRequest;
 import eu.assina.app.api.payload.SignUpRequest;
 import eu.assina.app.repository.UserRepository;
-import eu.assina.app.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -62,13 +61,11 @@ public class AssinaAuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getName())) {
-            throw new ApiException("Username {} already in use.",
-            AssinaError.UserEmailAlreadyUsed, signUpRequest.getName());
+            throw new ApiException(AssinaError.UserEmailAlreadyUsed, "Username {} already in use.", signUpRequest.getName());
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new ApiException("Email address {} already in use.",
-                    AssinaError.UserEmailAlreadyUsed, signUpRequest.getEmail());
+            throw new ApiException(AssinaError.UserEmailAlreadyUsed, "Email address {} already in use.", signUpRequest.getEmail());
         }
 
         // Creating user's account

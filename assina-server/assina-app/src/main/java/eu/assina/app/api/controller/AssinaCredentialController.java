@@ -1,13 +1,15 @@
 package eu.assina.app.api.controller;
 
-import eu.assina.app.api.model.AssinaCredential;
+import eu.assina.app.common.model.AssinaCredential;
 import eu.assina.app.api.model.AuthProvider;
 import eu.assina.app.api.model.User;
 import eu.assina.app.api.payload.CredentialSummary;
 import eu.assina.app.api.services.CredentialService;
 import eu.assina.app.api.services.UserService;
 import eu.assina.app.common.error.ApiException;
-import eu.assina.app.api.error.AssinaError;
+import eu.assina.app.common.error.AssinaError;
+import eu.assina.app.security.CurrentUser;
+import eu.assina.app.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,16 +44,19 @@ public class AssinaCredentialController
 	public CredentialSummary getCredentialsByOwner(@PathVariable(value = "id") String id)
 	{
 		return credentialService.getCredentialWithId(id).map(this::summarize).orElseThrow(
-				() -> new ApiException("Failed to find credential with id {}",
-						AssinaError.CredentialNotFound,
-						id));
+				() -> new ApiException(AssinaError.CredentialNotFound, "Failed to find credential with id {}", id));
 	}
 
-	@PostMapping("/{owner}")
+	@PostMapping()
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<AssinaCredential> createCredential(@PathVariable(value = "owner") String owner)
-	{
-		final AssinaCredential credential = credentialService.createCredential(owner, owner);
+	public ResponseEntity<AssinaCredential> createCredential(@CurrentUser UserPrincipal userPrincipal) {
+		String id = userPrincipal.getId();
+		User user = userService.getUserById(id).orElseThrow(
+				() -> new ApiException(AssinaError.UserNotFound, "Current user unknown: {}"));
+
+		// use the id as the credential owner, and the username or email as the DN
+		final AssinaCredential credential =
+				credentialService.createCredential(user.getId(), user.getUsername());
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
@@ -85,6 +90,7 @@ public class AssinaCredentialController
 		else {
 			user = dummy; // used by tests that don't have a user service
 		}
-		return new CredentialSummary(credential.getId(), user.getUsername(), user.getName(), credential.getCreatedAt(), credential.getCertificate().getType(), credential.getDescription());
+		return new CredentialSummary(credential.getId(), user.getUsername(), user.getName(), credential.getCreatedAt(),
+				credential.getDescription());
 	}
 }

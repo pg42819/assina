@@ -1,6 +1,4 @@
-package eu.assina.app.api.error;
-
-import eu.assina.app.common.error.ApiError;
+package eu.assina.app.common.error;
 
 /**
  * Enum holding all of the Assina error codes and descriptions
@@ -31,7 +29,15 @@ public enum AssinaError implements ApiError {
   OauthUnauthorizedRedirect("unauthorized_redirect", "Sorry! We've got an Unauthorized Redirect " +
                              "URI and can't proceed wtih authentication", 400),
   FailedCreatingCredential("failed_creating_credential",
-          "An Error occured while generating certificate and keys", 500);
+          "An error occurred while generating certificate and keys", 500),
+
+  FailedUnmarshallingPEM("failed_unmarshalling_pem",
+          "An error occurred while converting a PEM string to  key or certificate", 500),
+  FailedMarshallingPEM("failed_marshalling_pem",
+          "An error occurred while converting a key or certificate to a PEM string", 500),
+  FailedSigningData("failed_signing",
+          "An error occurred while trying to sign data with a certificate and private key", 500);
+
 
   private final String code;
   private final int httpCode;

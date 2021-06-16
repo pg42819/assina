@@ -24,6 +24,7 @@ public class PaginationHelper {
     }
 
     public String pageableToNextPageToken(Pageable pageable) {
+        // TODO make sure this is empty when there is no next page
         Pageable nextPage = pageable.next();
         return pageableToString(nextPage);
     }

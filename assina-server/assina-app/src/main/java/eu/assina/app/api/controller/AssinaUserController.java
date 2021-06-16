@@ -5,7 +5,7 @@ import eu.assina.app.api.payload.UserIdentityAvailability;
 import eu.assina.app.api.payload.UserProfile;
 import eu.assina.app.api.services.UserService;
 import eu.assina.app.common.error.ApiException;
-import eu.assina.app.api.error.AssinaError;
+import eu.assina.app.common.error.AssinaError;
 import eu.assina.app.security.CurrentUser;
 import eu.assina.app.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class AssinaUserController {
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         String id = userPrincipal.getId();
         User user = userService.getUserById(id).orElseThrow(
-                () -> new ApiException("Failed to find user {}", AssinaError.UserNotFound, id));
+                () -> new ApiException(AssinaError.UserNotFound, "Failed to find user {}", id));
         return user;
     }
 
@@ -47,7 +47,7 @@ public class AssinaUserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public UserProfile getUserProfile(@PathVariable(value = "id") String id) {
         UserProfile userProfile = userService.getUserProfile(id).orElseThrow(
-                () -> new ApiException("Failed to find user {}", AssinaError.UserNotFound, id));
+                () -> new ApiException(AssinaError.UserNotFound, "Failed to find user {}", id));
         return userProfile;
     }
 

@@ -1,31 +1,31 @@
 package eu.assina.app.api.services;
 
+import eu.assina.app.common.error.AssinaError;
+import eu.assina.app.common.model.AssinaCredential;
 import eu.assina.app.common.error.ApiException;
-import eu.assina.app.api.error.AssinaError;
-import eu.assina.app.api.model.AssinaCredential;
+import eu.assina.app.crypto.AssinaCryptoService;
 import eu.assina.app.repository.CredentialRepository;
-import eu.assina.crypto.cert.CertificateGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
-import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
 public class CredentialService
 {
-	CertificateGenerator generator;
 	private CredentialRepository credentialRepository;
+	private AssinaCryptoService cryptoService;
 
-	@Autowired
-	public CredentialService(CredentialRepository credentialRepository)
+	public CredentialService(CredentialRepository credentialRepository,
+							 AssinaCryptoService cryptoService)
 	{
 		this.credentialRepository = credentialRepository;
-		generator = new CertificateGenerator();
+		this.cryptoService = cryptoService;
 	}
 
 	/**
@@ -33,25 +33,15 @@ public class CredentialService
 	 * The private key is always stored encrypted.
 	 *
 	 * @param owner
-	 * @param subjectDistinguishedName name of the subject used in the certificate
+	 * @param subjectDN name of the subject used in the certificate
 	 * @return
 	 */
-	public AssinaCredential createCredential(String owner, String subjectDistinguishedName)
+	public AssinaCredential createCredential(String owner, String subjectDN)
 	{
-		try {
-			final KeyPair keyPair = generator.generateKeyPair();
-			final Certificate selfSignedCert = generator.createSelfSignedCert(keyPair, subjectDistinguishedName);
-			AssinaCredential credential = new AssinaCredential();
-			credential.setOwner(owner);
-			credential.setCertificate(selfSignedCert);
-			credential.setPrivateKey(keyPair.getPrivate());
-			credential.setPublicKey(keyPair.getPublic());
-			credentialRepository.save(credential);
-			return credential;
-		}
-		catch (Exception e) {
-			throw new ApiException(AssinaError.FailedCreatingCredential, e);
-		}
+		AssinaCredential credential = cryptoService.createCredential(owner, subjectDN);
+		credential.setCreatedAt(Instant.now());
+		credentialRepository.save(credential);
+		return credential;
 	}
 
 	/**
@@ -101,8 +91,7 @@ public class CredentialService
 			credentialRepository.deleteById(id);
 		}
 		catch (EmptyResultDataAccessException ex) {
-			throw new ApiException("Attempted to delete credentials that do not exist",
-					AssinaError.CredentialNotFound, id);
+			throw new ApiException(AssinaError.CredentialNotFound, "Attempted to delete credentials that do not exist", id);
 		}
 	}
 }

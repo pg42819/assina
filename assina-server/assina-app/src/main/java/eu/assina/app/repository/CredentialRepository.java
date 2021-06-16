@@ -1,6 +1,6 @@
 package eu.assina.app.repository;
 
-import eu.assina.app.api.model.AssinaCredential;
+import eu.assina.app.common.model.AssinaCredential;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
