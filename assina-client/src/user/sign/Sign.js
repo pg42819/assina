@@ -1,28 +1,42 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
-import './Profile.css';
+import './Sign.css';
 
-class Profile extends Component {
+class Sign extends Component {
     constructor(props) {
         super(props);
         console.log(props);
+        this.state = {
+            selectedFile: null
+        }
     }
 
-    handleClick(event) {
-        this.props.history.push("/sign");
+	onChangeHandler=event=>{
+        this.setState({
+          selectedFile: event.target.files[0]
+        })
+
+        console.log(this.state.selectedFile);
     }
+
+	handleSubmission() {
+		const formData = new FormData();
+
+		formData.append('File', this.state.selectedFile);
+
+        console.log("HEYYY")
+
+	}
 
     render() {
+
         return (
-            <div className="profile-container">
+            <div className="sign-container">
                 <div className="container">
-                    <div className="profile-info">
+                    <div className="sign-info">
                         <div className="profile-avatar">
                             { 
-                                this.props.currentUser.imageUrl ? (
-                                    <img src={this.props.currentUser.imageUrl} alt={this.props.currentUser.name}/>
-                                ) : (
+                                (
                                     <div className="text-avatar">
                                         <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
                                     </div>
@@ -34,15 +48,18 @@ class Profile extends Component {
                            <p className="profile-email">{this.props.currentUser.email}</p>
                         </div>
                     </div>
+                </div> 
+                <form>
+                <div>
+                <input type="file" name="file" onChange={this.onChangeHandler}/>
                     <div>
-                        <div className="sign-document">
-                            <Link to='/sign'>Sign Document</Link>
-                        </div>
+                        <button onClick={this.handleSubmission}>Submit</button>
                     </div>
                 </div>
+                </form>
             </div>
         );
     }
 }
 
-export default Profile
+export default Sign
