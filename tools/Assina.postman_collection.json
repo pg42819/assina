@@ -46,14 +46,12 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/auth/login",
+					"raw": "localhost:8080/auth/login",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"api",
-						"v1",
 						"auth",
 						"login"
 					]
@@ -96,14 +94,12 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/auth/login",
+					"raw": "localhost:8080/auth/login",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"api",
-						"v1",
 						"auth",
 						"login"
 					]
@@ -139,7 +135,90 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "get all users :admin",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 16 Jun 2021 16:28:28 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": \"006b6d6e-6b20-42b4-b5ce-35dea8f29be6\",\n        \"username\": \"Francisco Rosa\",\n        \"name\": \"Francisco Rosa\",\n        \"joinedAt\": \"2021-06-15T10:13:01Z\",\n        \"credentialCount\": 0\n    },\n    {\n        \"id\": \"21017d33-f3a7-4ca4-a0b5-1be706429a71\",\n        \"username\": \"Ana Banana\",\n        \"name\": \"Ana Banana\",\n        \"joinedAt\": null,\n        \"credentialCount\": 1\n    },\n    {\n        \"id\": \"220b7931-3602-4c21-ae51-dcaa1c52c204\",\n        \"username\": \"Carlos Santana\",\n        \"name\": \"Carlos Santana\",\n        \"joinedAt\": null,\n        \"credentialCount\": 4\n    },\n    {\n        \"id\": \"5f7099f2-34fc-40f2-9395-66a448c49382\",\n        \"username\": \"bob\",\n        \"name\": \"bob\",\n        \"joinedAt\": null,\n        \"credentialCount\": 0\n    },\n    {\n        \"id\": \"60aed53a-5aa7-4a32-97ad-5d1eb88a3fad\",\n        \"username\": \"rover rhubarb\",\n        \"name\": \"rover rhubarb\",\n        \"joinedAt\": \"2021-06-14T22:11:41Z\",\n        \"credentialCount\": 0\n    },\n    {\n        \"id\": \"d31a98ab-34ee-4658-a22c-fa5a6c443fe4\",\n        \"username\": \"admin\",\n        \"name\": \"admin\",\n        \"joinedAt\": null,\n        \"credentialCount\": 0\n    }\n]"
+				}
+			]
 		},
 		{
 			"name": "get all credentials :admin",
@@ -157,7 +236,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/users",
+					"raw": "localhost:8080/api/v1/credentials",
 					"host": [
 						"localhost"
 					],
@@ -165,11 +244,211 @@
 					"path": [
 						"api",
 						"v1",
-						"users"
+						"credentials"
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "get all credentials :admin",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/credentials",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"credentials"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 16 Jun 2021 16:28:36 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": [\n        {\n            \"ownerUsername\": \"carlos\",\n            \"ownerName\": \"Carlos Santana\",\n            \"createdAt\": null,\n            \"description\": null\n        },\n        {\n            \"ownerUsername\": \"ana\",\n            \"ownerName\": \"Ana Banana\",\n            \"createdAt\": null,\n            \"description\": null\n        },\n        {\n            \"ownerUsername\": \"carlos\",\n            \"ownerName\": \"Carlos Santana\",\n            \"createdAt\": null,\n            \"description\": null\n        },\n        {\n            \"ownerUsername\": \"carlos\",\n            \"ownerName\": \"Carlos Santana\",\n            \"createdAt\": null,\n            \"description\": null\n        },\n        {\n            \"ownerUsername\": \"carlos\",\n            \"ownerName\": \"Carlos Santana\",\n            \"createdAt\": \"2021-06-16T15:44:45Z\",\n            \"description\": null\n        }\n    ],\n    \"pageable\": {\n        \"sort\": {\n            \"unsorted\": true,\n            \"sorted\": false,\n            \"empty\": true\n        },\n        \"pageNumber\": 0,\n        \"pageSize\": 20,\n        \"offset\": 0,\n        \"unpaged\": false,\n        \"paged\": true\n    },\n    \"totalPages\": 1,\n    \"totalElements\": 5,\n    \"last\": true,\n    \"numberOfElements\": 5,\n    \"sort\": {\n        \"unsorted\": true,\n        \"sorted\": false,\n        \"empty\": true\n    },\n    \"size\": 20,\n    \"number\": 0,\n    \"first\": true,\n    \"empty\": false\n}"
+				}
+			]
+		},
+		{
+			"name": "create new credentials: carlos",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/credentials",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"credentials"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "create new credentials: carlos",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/credentials",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"credentials"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Location",
+							"value": "http://localhost:8080/api/v1/credentials/c397c20b-81fe-4717-88ff-1a09b5589d3e"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 16 Jun 2021 15:44:53 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"createdAt\": \"2021-06-16T15:44:44.867356Z\",\n    \"updatedAt\": null,\n    \"id\": \"c397c20b-81fe-4717-88ff-1a09b5589d3e\",\n    \"owner\": \"220b7931-3602-4c21-ae51-dcaa1c52c204\",\n    \"description\": null,\n    \"publicKey\": \"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3EEga9j+ikQuLm8hImsF\\nI32fF+bVAWxjJ0L/j6wwtRKYzvkVFAECdpPpB4HG8lLuWTmvBJ9NOEpqHHvlDsFr\\n0KpTgdv6/deLxF+7OFERWLN8o2bHOQXGYpr8iDeTVuq2IztkEodOOGm/Ar27p/cJ\\nsfYZ24jikKbjBu4MZfZ2BNlOQXfT3nVLd6ebstzFzmCAkreRdrK42mth6Y7bkmS4\\nCj18aLHDQXDWDzTshJyUuamQ5tYr3eqPG+xy+0gEduTu8oZKEJKoWaTLZZSSLHEU\\n+8vgpX79PTqsZMvqyL3mzbKNtJ/jesUOaJN6KAaUa8NfzuVfGKjD462JkqyegHtL\\n0wIDAQAB\\n-----END PUBLIC KEY-----\\n\",\n    \"privateKey\": \"-----BEGIN RSA PRIVATE KEY-----\\nProc-Type: 4,ENCRYPTED\\nDEK-Info: AES-256-CFB,2D5D3FA58C8CFD6C0DDABA77D4E917C9\\n\\nRmuKBcKYTAjeHlx0uIjBGY7H0lkM4CVA8dd2LYE8AiPYddX8L9jxalVkRu+YWvQ5\\nYaYWeAlA3YkujjRBLSoi1DR/74nV+jakYv3VVm0tpdR7TgsHARoyx4K2x4WKiQMq\\n8OE1HvYWNg7YxTSAIqwaxvF1pxnpYKhKUK8Eadgr4qwRum1zBOxg8hGJnwMdlxZQ\\nfWe+BRchKniISKuQRc7Wg46UD3/NXRfgiuyQ7IDarN82faWUxRJhjJ0dcXrFxjfS\\nUg/selI9t0PeD9StrQCazmxuTTxviw8kUQuVTArO85MpdAerDEXcG/DtIjon7eVj\\nWHh9J9I1h6//CVNaEPpFTkjzwpYybkG/pzAK2YCWCwKnW4R9mzbLbJ5wkJxGXTdH\\n4GNZtIrbLSFSsx2ntk7dhRPxk0qOZbFA0/QU0YtU+xWVpsyggXlsSF0yHeD7iYU1\\nJ1AbWX6SGpnXP1Dw7VonFoRUZpTEFVyWn4n45LAtdmhpi6wSKRLlvkqYJBL1JbHH\\n1A7bCz549CYvvzq1czZExlbcSooBKipAY2lWfUkmWZ2KYPYfdTLNhCwNfwj3kPJp\\n7gU0axLOczoC8BvK0/wObCdPxW70/BO1BTqdhu+CHEpZFoRXuc4Nze/uLc6zKA3r\\nH9ouQ4/Cbs4Vdp3vPqkCYi1LncV/2DJlaChRKN4bgf/blqeGKPZTC3C4Fxal54w4\\nAkDlijNnKQPQiNHvYe2SRw2fuo36CxA09xRMu/b04EH9FeUankzeg3goozcxVKGL\\nwT4l99AOWPkSsKj0boCcJSwJbXqFhTAGCldGcDK6cEsmrlT/iWbnzVYun7EAmovP\\nYGFlY5AWWY1x7hMk097yy07GJkp/q6kyGJkpOzZtkHzI/SDdCErlOyXb0A58gNe4\\niQUpA3YN1IU828QBwE2v9e8X1gJWFhZp8N+K0ShA5a8Ayt74weFTYnF/8pdELXZt\\n+xn8hyqBYm8KmF/RJpIcetBhmS9cCHfh3COfdkV4iujcx5MAMCJFwz+Qgkgug661\\nGIBvtvjCAtstT6vxMwbVc7FnjYf9XN11enJKQSuDJdBuA3gPk3ytOQFEWxxE4R0v\\nbeksHULz5th39uB8U76nl9k0BkfhMLQpjbu0BL0gIey+f7RAC2BLtJOPBQCuuQGB\\njtqD6dFaP/8McNxhdfM5daD6jX/nYgQzR7+ujd/dNMro38bG9ICGmU6STlZhTxFv\\ncfZA4iI7d1OEJb/lQgbiWj8ZwJ45I43OuSKr122bs/sjWPaSxGZiY0o9Fu5DplDo\\nhmwgKid8xpvy9KMj2lDti59UdcrF8g612sroL5UmdNCOBHr8zWlMbFrPnNzetiA1\\naeIoMMDq22C7vefADrUNekYV02aZtswTcpbkALMj4+m6mkGvOOsKdRavLJmhlAbX\\n7A5/v8L83oqFm1H5yp7XsD0eNwy7t7F/HxDtn5Mia1OJssnLSLlOkkDBaQeYC6NT\\ngGqDEEbZYTdd0XwJFbXgSS0gkJDpkxE1bn5UJ0f4cd6F8bdm4uoluni4qW+OcQl2\\nc5hOrS2UK0vvFYYS9z1zIITDWq8Tm3MQHJHqI8tRbrw2jZhIoWmLmw==\\n-----END RSA PRIVATE KEY-----\\n\",\n    \"keyEnabled\": true,\n    \"keyAlgorithmOIDs\": [\n        \"1.2.840.113549.1.1.1\"\n    ],\n    \"keyBitLength\": 2048,\n    \"certificate\": \"-----BEGIN CERTIFICATE-----\\nMIICuDCCAaCgAwIBAgIGAXoVfwi3MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNVBAMM\\nCWFzc2luYS5ldTAeFw0yMTA2MTYxNTQ0NDRaFw0yMjA2MTYxNTQ0NDRaMBExDzAN\\nBgNVBAMMBmNhcmxvczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANxB\\nIGvY/opELi5vISJrBSN9nxfm1QFsYydC/4+sMLUSmM75FRQBAnaT6QeBxvJS7lk5\\nrwSfTThKahx75Q7Ba9CqU4Hb+v3Xi8RfuzhREVizfKNmxzkFxmKa/Ig3k1bqtiM7\\nZBKHTjhpvwK9u6f3CbH2GduI4pCm4wbuDGX2dgTZTkF30951S3enm7Lcxc5ggJK3\\nkXayuNprYemO25JkuAo9fGixw0Fw1g807ISclLmpkObWK93qjxvscvtIBHbk7vKG\\nShCSqFmky2WUkixxFPvL4KV+/T06rGTL6si95s2yjbSf43rFDmiTeigGlGvDX87l\\nXxiow+OtiZKsnoB7S9MCAwEAAaMTMBEwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG\\n9w0BAQsFAAOCAQEAx/vr0XNzbHo3ZVMK6fiIAmgsqh1UKoLxY7EUINi/mK5ZPLNq\\n0vhucGELNLoJng10Ll5Ixayw/Ce3H4Nz1SuSpDFOL8xDy/0ueFZqTeQlj4GGrhcR\\nvBzGwvEaFDSnFieY99ChWaZuF8i82Bq5bpDTozIJYLPiQtZ3vBeUDxnt1GO1IhdW\\nHcfnYJYkU9q+Zu2xbuz9v97/QKPdp9UaP/TMD7XBRZTPjhugbv3BhEsVFzVysJfm\\nmCwgILNll0+RE+CSJqk/5qAj22h0zmictJbOXKbKbXZrtN6MoGHbHAKDx7y44Jw4\\nL5JyfMbrKTkGF2c3K1lC1JEXaDKbtX66ZPaUZw==\\n-----END CERTIFICATE-----\\n\",\n    \"ecdsacurveOID\": null\n}"
+				}
+			]
 		},
 		{
 			"name": "get all users: regular user",
@@ -217,7 +496,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/users",
+					"raw": "localhost:8080/api/v1/user/me",
 					"host": [
 						"localhost"
 					],
@@ -225,7 +504,8 @@
 					"path": [
 						"api",
 						"v1",
-						"users"
+						"user",
+						"me"
 					]
 				}
 			},
@@ -266,6 +546,46 @@
 			"response": []
 		},
 		{
+			"name": "CSC Sign Hash _ NOT WORKING",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"credentialID\": \"a3d365e0-1ece-420c-a900-818c652b366d,\n   \"SAD\": \"_TiHRG-bAH3XlFQZ3ndFhkXf9P24/CKN69L8gdSYp5_pw\",\n   \"hash\":\n   [\n     \"this-is-a-hash\"\n   ],\n   \"hashAlgo\": \"2.16.840.1.101.3.4.2.1\",\n   \"signAlgo\": \"1.2.840.113549.1.1.1\",\n   \"clientData\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/csc/v1/signatures/signHash",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"csc",
+						"v1",
+						"signatures",
+						"signHash"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "CSC List Credentials",
 			"request": {
 				"auth": {
@@ -298,7 +618,224 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "CSC List Credentials",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/csc/v1/credentials/list",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"csc",
+								"v1",
+								"credentials",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 16 Jun 2021 16:01:04 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"credentialIDs\": [\n        \"775459fe-dd9b-451f-bdb0-77d01bcb35f7\",\n        \"a3d365e0-1ece-420c-a900-818c652b366d\",\n        \"a6055519-8459-4699-a2e1-e6a20d332aee\",\n        \"c397c20b-81fe-4717-88ff-1a09b5589d3e\"\n    ],\n    \"nextPageToken\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "CSC Credential Info _ NOT WORKING",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\t{\n\t    \"credentialID\": \"a3d365e0-1ece-420c-a900-818c652b366d\",\n\t    \"certificates\": \"single\",\n\t    \"certInfo\": true,\n\t    \"authInfo\": true\n\t }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/csc/v1/credentials/info",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"csc",
+						"v1",
+						"credentials",
+						"info"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "CSC Credential Info",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\t{\n\t    \"credentialID\": \"a3d365e0-1ece-420c-a900-818c652b366d\",\n\t    \"certificates\": \"single\",\n\t    \"certInfo\": true,\n\t    \"authInfo\": true\n\t }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/csc/v1/credentials/info",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"csc",
+								"v1",
+								"credentials",
+								"info"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 16 Jun 2021 16:22:20 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"invalid_request\",\n    \"error_description\": \"Missing (or invalid type) string parameter credentialID\"\n}"
+				}
+			]
 		}
 	],
 	"variable": [
