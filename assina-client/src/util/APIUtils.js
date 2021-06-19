@@ -49,3 +49,11 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
+
+export function sign(signRequest) {
+    return request({
+        url: 'http://localhost:8000/sign',
+        method: 'POST',
+        body: JSON.stringify(signRequest)
+    });
+}
