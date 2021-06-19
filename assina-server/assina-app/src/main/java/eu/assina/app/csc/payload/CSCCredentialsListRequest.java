@@ -25,7 +25,8 @@ public class CSCCredentialsListRequest implements CSCRequest {
     // the remote service SHALL return its own predefined maximum number of items.
     private int maxResults;
 
-    // REQUIRED Conditional An opaque token to retrieve a new page of results.
+    // REQUIRED Conditional
+    // An opaque token to retrieve a new page of results.
     // The parameter is only REQUIRED to retrieve results other than the first page,
     // based on the value of maxResult.
     private String pageToken;

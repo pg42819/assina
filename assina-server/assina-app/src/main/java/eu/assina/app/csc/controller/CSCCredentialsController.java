@@ -10,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Credentials endpoints from:
@@ -64,8 +68,13 @@ public class CSCCredentialsController
 	@PostMapping("list")
 	@ResponseStatus(HttpStatus.OK)
 	public CSCCredentialsListResponse list(@CurrentUser UserPrincipal userPrincipal,
-										   CSCCredentialsListRequest listRequest)
+										   @Valid @RequestBody(required = false) CSCCredentialsListRequest listRequest)
 	{
+		// Note required=false: if client POSTS with no body, we can add the current principal anyway
+		if (listRequest == null) {
+			listRequest = new CSCCredentialsListRequest();
+		}
+		// tODO add validation
 		// id must be from logged in user only - user-specified
 		if (StringUtils.hasText(listRequest.getUserId())) {
 			throw new ApiException(CSCInvalidRequest.NonNullUserId);
@@ -136,7 +145,7 @@ public class CSCCredentialsController
 	 */
 	@PostMapping("info")
 	@ResponseStatus(HttpStatus.OK)
-	public CSCCredentialsInfoResponse info(CSCCredentialsInfoRequest infoRequest)
+	public CSCCredentialsInfoResponse info(@Valid @RequestBody CSCCredentialsInfoRequest infoRequest)
 	{
 		CSCCredentialsInfoResponse credentialsInfo =
 				credentialsService.getCredentialsInfo(infoRequest);

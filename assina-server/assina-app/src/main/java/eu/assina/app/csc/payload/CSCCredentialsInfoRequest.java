@@ -14,9 +14,7 @@ import javax.validation.constraints.NotBlank;
  */
 public class CSCCredentialsInfoRequest extends AbstractLangRequest{
 
-    public CSCCredentialsInfoRequest() {
-        System.out.println("created");
-    }
+    public CSCCredentialsInfoRequest() {}
 
     // Allowed values for the certificates attribute: not used in payload but derived in validation
     public enum CertsRequest { none, single, chain }

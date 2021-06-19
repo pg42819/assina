@@ -50,7 +50,7 @@ public class CSCInfoController
 	 */
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.OK)
-	public CSCInfoResponse info(CSCInfoRequest infoRequest)
+	public CSCInfoResponse info(@RequestBody(required = false) CSCInfoRequest infoRequest)
 	{
 		// TODO handle language
 		CSCInfoResponse info = new CSCInfoResponse(infoService.getInfo());
