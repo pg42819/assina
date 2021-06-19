@@ -587,6 +587,23 @@
 		},
 		{
 			"name": "CSC List Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Returned list\", function () {",
+							"    pm.response.to.have.status(200)",
+							"    ",
+							"});",
+							"const responseJson = pm.response.json();",
+							"var token = responseJson.accessToken",
+							"pm.collectionVariables.set(\"user-token\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -602,7 +619,12 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "localhost:8080/csc/v1/credentials/list",
@@ -709,7 +731,7 @@
 			]
 		},
 		{
-			"name": "CSC Credential Info _ NOT WORKING",
+			"name": "CSC Credential Info",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -725,7 +747,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "\t{\n\t    \"credentialID\": \"a3d365e0-1ece-420c-a900-818c652b366d\",\n\t    \"certificates\": \"single\",\n\t    \"certInfo\": true,\n\t    \"authInfo\": true\n\t }",
+					"raw": "\t{\n\t    \"credentialID\": \"4530a0f6-8fb9-4874-8979-c632e740def0\",\n\t    \"certificates\": \"single\",\n\t    \"certInfo\": true,\n\t    \"authInfo\": true\n\t }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -748,13 +770,13 @@
 			},
 			"response": [
 				{
-					"name": "CSC Credential Info",
+					"name": "CSC Credential response",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\t{\n\t    \"credentialID\": \"a3d365e0-1ece-420c-a900-818c652b366d\",\n\t    \"certificates\": \"single\",\n\t    \"certInfo\": true,\n\t    \"authInfo\": true\n\t }",
+							"raw": "\t{\n\t    \"credentialID\": \"4530a0f6-8fb9-4874-8979-c632e740def0\",\n\t    \"certificates\": \"single\",\n\t    \"certInfo\": true,\n\t    \"authInfo\": true\n\t }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -775,8 +797,8 @@
 							]
 						}
 					},
-					"status": "Bad Request",
-					"code": 400,
+					"status": "OK",
+					"code": 200,
 					"_postman_previewlanguage": "json",
 					"header": [
 						{
@@ -825,15 +847,19 @@
 						},
 						{
 							"key": "Date",
-							"value": "Wed, 16 Jun 2021 16:22:20 GMT"
+							"value": "Sat, 19 Jun 2021 14:51:32 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
 						},
 						{
 							"key": "Connection",
-							"value": "close"
+							"value": "keep-alive"
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"error\": \"invalid_request\",\n    \"error_description\": \"Missing (or invalid type) string parameter credentialID\"\n}"
+					"body": "{\n    \"description\": null,\n    \"key\": {\n        \"status\": \"enabled\",\n        \"algo\": [\n            \"1.2.840.113549.1.1.1\"\n        ],\n        \"len\": \"2048\",\n        \"curve\": null\n    },\n    \"cert\": {\n        \"status\": \"expired\",\n        \"certificates\": [\n            \"-----BEGIN CERTIFICATE-----\\nMIICuDCCAaCgAwIBAgIGAXokwJ7sMA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNVBAMM\\nCWFzc2luYS5ldTAeFw0yMTA2MTkxNDUwNDFaFw0yMjA2MTkxNDUwNDFaMBExDzAN\\nBgNVBAMMBmNhcmxvczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKE6\\ndj7INCzSK2gJumt5f7Zngh4MCQxn9EuCF9po5HdpSXBXcEdGwrslxHM98MwTkUzW\\ndQn0A/bIjAvdPziquK6GfAl25nMHBnibIG2Y2HTMNiVVKWgu4JJkPti5OPDwZI7h\\nO7oBBDQg+G2qN+YFGFhRiIK2pe2Zss3FcU9r02RJTjCgS3bapiPF2oIWn1HYnBNS\\nWiovfwRB5Ds0HLnpGU01YUnwVwVY3z5FCCbXAqCPkS5A0LMPJ19+4eWtckt3AiTK\\n43Oi10Zn6tY85gl3Uw33z4Q42xF9rg9dyGG1sV86L2kZJB46TBL1ZP8RorY/JkvM\\n/7sckro6KLdvUBMgMWECAwEAAaMTMBEwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG\\n9w0BAQsFAAOCAQEAEBJ9ND+3KmCYm6YHmgs4cst+eVZVkpXt+tj5JfO+oLczA1YJ\\nE5wIikIv7Mu4P+W27SJTyySQsvDbwOHgOuOcN+Yk+hj3zoc/OfHdMs0cssA1DvU2\\nBlZoh7r+gG+5Cmi/YhJ7KE2Y4cTeDwzqD5n2COCyfYz90NHLLQpuBrd0pXBZ1PF5\\nzeBdOl7AQLkqo7IkfZJL17QqLC/j72IoJg3MMlFPvi9hUtbEej5vrgEPjQPioIeg\\nIWiGqPTWLTJwuDtw3wynOaVm+GEp6JJRulphfWqS92r1Bmy1IvYGZhE8JHSRqhIi\\nYNDwonUJpjwis9Oci8cqu2yE8KC4KWFwU6ch5g==\\n-----END CERTIFICATE-----\\n\"\n        ],\n        \"issuerDN\": \"CN=assina.eu\",\n        \"serialNumber\": \"1624114241260\",\n        \"subjectDN\": \"CN=carlos\",\n        \"validFrom\": \"20210619155041Z\",\n        \"validTo\": \"20220619155041Z\"\n    },\n    \"authMode\": \"explicit\",\n    \"multisign\": 1,\n    \"lang\": null,\n    \"scal\": \"1\",\n    \"pin\": null,\n    \"otp\": null\n}"
 				}
 			]
 		}
