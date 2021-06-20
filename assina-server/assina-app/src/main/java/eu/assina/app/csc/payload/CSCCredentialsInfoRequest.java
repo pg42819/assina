@@ -6,9 +6,6 @@ import eu.assina.app.csc.error.CSCInvalidRequest;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-
-import static eu.assina.app.csc.error.CSCInvalidRequest.MissingCredentialId;
 
 /**
  * Body for request of credentials/info - information about a specific credential record

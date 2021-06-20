@@ -2,6 +2,7 @@ package eu.assina.app.common.config;
 
 import eu.assina.app.crypto.CryptoConfig;
 import eu.assina.app.csc.model.AbstractInfo;
+import eu.assina.app.security.jwt.JwtProviderConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "csc")
@@ -16,12 +17,16 @@ public class CSCProperties {
     // properties for controlling crypto algos, signing etc for CSC
     private final Crypto crypto = new Crypto();
 
+    // SAD config properties
+    private final Sad sad = new Sad();
+
     // All CSC info properties are in the YAML file or environment
     public static class Info extends AbstractInfo {
     }
 
-    public static class Crypto extends CryptoConfig {
-    }
+    public static class Crypto extends CryptoConfig { }
+
+    public static class Sad extends JwtProviderConfig {}
 
     public static class Api {
         private int pageSize;
@@ -46,6 +51,10 @@ public class CSCProperties {
 
     public CryptoConfig getCrypto() {
         return crypto;
+    }
+
+    public JwtProviderConfig getSad() {
+        return sad;
     }
 
     public Api getApi() {

@@ -40,6 +40,9 @@ public class User extends DateAudit {
     private String providerId;
     private String role;
 
+    // User PIN Must be Bcrypt encoded
+    private String encodedPIN;
+
     public User() {
         id = UUID.randomUUID().toString();
     }
@@ -130,5 +133,13 @@ public class User extends DateAudit {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void setEncodedPIN(String encodedPIN) {
+        this.encodedPIN = encodedPIN;
+    }
+
+    public String getEncodedPIN() {
+        return encodedPIN;
     }
 }

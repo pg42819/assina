@@ -1,6 +1,5 @@
 package eu.assina.app.common.config;
 
-import eu.assina.app.common.util.Constants;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerTypePredicate;
@@ -27,11 +26,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix(Constants.API_URL_ROOT,
+        configurer.addPathPrefix(AssinaConstants.API_URL_ROOT,
                 HandlerTypePredicate.forAnnotation(RestController.class)
                         .and(HandlerTypePredicate.forBasePackage(
                                         "eu.assina.app.api")));
-        configurer.addPathPrefix(Constants.CSC_URL_ROOT,
+        configurer.addPathPrefix(AssinaConstants.CSC_URL_ROOT,
                 HandlerTypePredicate.forAnnotation(RestController.class)
                         .and(HandlerTypePredicate.forBasePackage(
                                 "eu.assina.app.csc")));

@@ -3,7 +3,7 @@ package eu.assina.app.security.oauth2;
 import eu.assina.app.common.config.AppProperties;
 import eu.assina.app.common.error.ApiException;
 import eu.assina.app.common.error.AssinaError;
-import eu.assina.app.security.TokenProvider;
+import eu.assina.app.security.UserAuthenticationTokenProvider;
 import eu.assina.app.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,7 +31,7 @@ import static eu.assina.app.security.oauth2.HttpCookieOAuth2AuthorizationRequest
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private TokenProvider tokenProvider;
+    private UserAuthenticationTokenProvider tokenProvider;
 
     private AppProperties appProperties;
 
@@ -39,7 +39,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
     @Autowired
-    OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
+    OAuth2AuthenticationSuccessHandler(UserAuthenticationTokenProvider tokenProvider, AppProperties appProperties,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.tokenProvider = tokenProvider;
         this.appProperties = appProperties;

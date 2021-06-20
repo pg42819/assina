@@ -6,7 +6,7 @@ import eu.assina.app.api.payload.CredentialSummary;
 import eu.assina.app.api.services.CredentialService;
 import eu.assina.app.common.error.AssinaError;
 import eu.assina.app.common.model.AssinaCredential;
-import eu.assina.app.common.util.Constants;
+import eu.assina.app.common.config.AssinaConstants;
 import eu.assina.app.util.TestResponseMatches;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,11 +50,11 @@ public class CredentialControllerTest {
   static AssinaCredential CREDENTIAL;
 
   private static String credPath() {
-    return Constants.API_URL_ROOT + "/credentials";
+    return AssinaConstants.API_URL_ROOT + "/credentials";
   }
 
   private static String credPath(String id) {
-    return Constants.API_URL_ROOT + "/credentials/" + id;
+    return AssinaConstants.API_URL_ROOT + "/credentials/" + id;
   }
 
   static {

@@ -1,9 +1,5 @@
 package eu.assina.app.csc.payload;
 
-import com.nimbusds.oauth2.sdk.AbstractRequest;
-import eu.assina.app.common.util.Constants;
-import org.springframework.util.StringUtils;
-
 import javax.validation.constraints.Null;
 
 /**

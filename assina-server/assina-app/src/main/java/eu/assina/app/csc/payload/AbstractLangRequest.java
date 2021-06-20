@@ -1,6 +1,7 @@
 package eu.assina.app.csc.payload;
 
-import eu.assina.app.common.util.Constants;
+import eu.assina.app.common.config.AssinaConstants;
+import eu.assina.app.csc.model.AssinaCSCConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -36,9 +37,9 @@ public abstract class AbstractLangRequest implements CSCRequest {
      */
     public void validate() {
         if (StringUtils.hasText(lang)) {
-            if (!lang.equals(Constants.AssinaLang)) {
+            if (!lang.equals(AssinaCSCConstants.CSC_LANG)) {
                 log.warn("Unsupported lang in request: {}. Assina only supports ",
-                        lang, Constants.AssinaLang);
+                        lang, AssinaCSCConstants.CSC_LANG);
             }
         }
     }

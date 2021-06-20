@@ -1,6 +1,11 @@
 package eu.assina.app.csc.error;
 
+import eu.assina.app.common.config.AssinaConstants;
 import eu.assina.app.common.error.ApiError;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * Enum holding all of the Assina error codes and descriptions
@@ -48,6 +53,16 @@ public enum CSCInvalidRequest implements ApiError {
   InvalidHashLength("Invalid digest value length"),
   InvalidOTP("The OTP is invalid"),
   SADExpired("SAD expired"),
+
+  // credential/authorize
+  MissingNumSignatures("Missing (or invalid type) integer parameter numSignatures"),
+  InvalidNumSignatures("Invalid value for parameter numSignatures"),
+  TooHighNumSignatures("Numbers of signatures is too high"),
+
+
+  InvalidPin("The PIN is invalid"),
+  LockedPin("PIN locked"),
+
 
   // TODO looks like it needs to be parameterized but this could cause reflected XSS
   Invalid("Signing certificate 'O=[organization],CN=[common_name]' is expired");

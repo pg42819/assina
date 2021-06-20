@@ -1,22 +1,32 @@
 package eu.assina.app.csc.services;
 
+import eu.assina.app.api.model.User;
+import eu.assina.app.api.services.UserService;
+import eu.assina.app.common.config.AssinaConstants;
+import eu.assina.app.common.error.AssinaError;
 import eu.assina.app.common.model.AssinaCredential;
 import eu.assina.app.api.services.CredentialService;
 import eu.assina.app.common.config.PaginationHelper;
 import eu.assina.app.common.error.ApiException;
 import eu.assina.app.crypto.AssinaCryptoService;
 import eu.assina.app.csc.error.CSCInvalidRequest;
+import eu.assina.app.csc.model.AssinaCSCConstants;
 import eu.assina.app.csc.model.CertificateStatus;
+import eu.assina.app.csc.payload.CSCCredentialsAuthorizeRequest;
+import eu.assina.app.csc.payload.CSCCredentialsAuthorizeResponse;
 import eu.assina.app.csc.payload.CSCCredentialsInfoRequest;
 import eu.assina.app.csc.payload.CSCCredentialsInfoResponse;
 import eu.assina.app.csc.payload.CSCCredentialsListRequest;
 import eu.assina.app.csc.payload.CSCCredentialsListResponse;
+import eu.assina.app.repository.CredentialRepository;
+import eu.assina.app.security.UserPrincipal;
 import eu.assina.app.util.CertificateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.cert.X509Certificate;
@@ -31,14 +41,24 @@ public class CSCCredentialsService {
 
 	@Autowired
 	PaginationHelper paginationHelper;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	private CredentialService credentialService;
+	private UserService userService;
 	private AssinaCryptoService cryptoService;
+	private CSCSADProvider sadProvider;
 
 
 	public CSCCredentialsService(CredentialService credentialService,
-								 AssinaCryptoService cryptoService) {
+								 UserService userService,
+								 AssinaCryptoService cryptoService,
+								 CSCSADProvider sadProvider) {
 		this.credentialService = credentialService;
+		this.userService = userService;
 		this.cryptoService = cryptoService;
+		this.sadProvider = sadProvider;
 	}
 
 	/**
@@ -76,31 +96,26 @@ public class CSCCredentialsService {
 		return response;
 	}
 
-	// TODO authorize creds
-	//	public CSCCredentialsAuthorizeResponse authorizeCredential(CSCCredentialsAuthorizeRequest);
-
+	/**
+	 * Returns details about a the requested credential.
+	 */
 	public CSCCredentialsInfoResponse getCredentialsInfo(CSCCredentialsInfoRequest infoRequest) {
 		// validate the basic parameters
 		infoRequest.validate();
 
 		final String credentialID = infoRequest.getCredentialID();
-		final AssinaCredential credential =
-				credentialService.getCredentialWithId(credentialID).orElseThrow(
-						() -> new ApiException(CSCInvalidRequest.InvalidCredentialId,
-						"No credential found with the given Id", credentialID));
+		final AssinaCredential credential = loadCredential(credentialID);
 
 		// TODO check if owner matches credential
 		CSCCredentialsInfoResponse response = new CSCCredentialsInfoResponse();
 
-		// REQUIRED
 		// One of implicit | explicit | oauth2code
-		// TODO make a constant and enforce the explicit per the standard
-		response.setAuthMode("explicit");
-
+		response.setAuthMode(AssinaCSCConstants.CSC_AUTH_MODE);
 		response.setDescription(credential.getDescription());
-		response.setMultisign(1); // Only 1 signature supported
+		// this value matches that in credential/authorize
+		response.setMultisign(AssinaCSCConstants.CSC_MAX_REQUEST_SIGNATURES);
 		// “1”: The hash  to-be-signed is not linked to the signature activation data.
-		response.setSCAL("1");
+		response.setSCAL(AssinaCSCConstants.CSC_SCAL);
 		response.setKey(buildKeyInfo(credential));
 
 		CSCCredentialsInfoResponse.Cert cert = new CSCCredentialsInfoResponse.Cert();
@@ -160,11 +175,20 @@ public class CSCCredentialsService {
 	}
 
 	private CSCCredentialsInfoResponse.OTP buildOTPInfo() {
-		return null; // TODO if needed add OTP
+		return null; // later we might add OTP support
 	}
 
 	private CSCCredentialsInfoResponse.PIN buildPINInfo() {
-		return null; // TODO if needed add PIN
+		CSCCredentialsInfoResponse.PIN pinInfo = new CSCCredentialsInfoResponse.PIN();
+
+		// presence is true|false|optional
+		// ASSINA: we are using PIN so true
+		pinInfo.setPresence(Boolean.TRUE.toString());
+		// PIN  is numeric (use "A" for alpha, "N" for numeric only)
+		pinInfo.setLabel("PIN");
+		pinInfo.setDescription("PIN required for authorizing Assina to sign with this credential");
+		pinInfo.setFormat("N");
+		return pinInfo;
 	}
 
 	private CSCCredentialsInfoResponse.Key buildKeyInfo(AssinaCredential credential) {
@@ -174,5 +198,45 @@ public class CSCCredentialsService {
 		key.setLen(String.valueOf(credential.getKeyBitLength())); // num bits in key
         key.setStatus(credential.isKeyEnabled() ? "enabled" : "disabled");
         return key;
+	}
+
+	/**
+	 * Valdiate the PIN provioded and generate a SAD token for the user to authorize the credentials.
+	 *
+	 * @param userPrincipal user making the request - must own the credentials
+	 * @param authorizeRequest authorization request
+	 */
+	public CSCCredentialsAuthorizeResponse authorizeCredential(UserPrincipal userPrincipal,
+															   CSCCredentialsAuthorizeRequest authorizeRequest) {
+		CSCCredentialsAuthorizeResponse response = new CSCCredentialsAuthorizeResponse();
+		String id = userPrincipal.getId();
+		User user = userService.getUserById(id).orElseThrow(
+				() -> new ApiException(AssinaError.UserNotFound, "Current user unknown: {}"));
+		final String credentialID = authorizeRequest.getCredentialID();
+		final AssinaCredential credential = loadCredential(credentialID);
+		final String requestPIN = authorizeRequest.getPIN();
+		final String userPIN = user.getEncodedPIN();
+		if (passwordEncoder.matches(requestPIN, userPIN)) {
+			// encoded request pin is valid for this user, so proceed
+			// we don't really need the credential ID in the SAD, consider
+			// in the future supporting SCAL=2 and storing the hash and validating later
+			String SAD = sadProvider.createSAD(credentialID);
+			final long lifetimeSeconds = sadProvider.getLifetimeSeconds();
+			response.setSAD(SAD);
+			response.setExpiresIn(lifetimeSeconds - 1); // subtract a second to be sure
+		}
+		else {
+			throw new ApiException(CSCInvalidRequest.InvalidPin,
+					"The provided PIN does not match the one created for this user");
+		}
+		return response;
+	}
+
+	protected AssinaCredential loadCredential(String credentialID) {
+		final AssinaCredential credential =
+				credentialService.getCredentialWithId(credentialID).orElseThrow(
+						() -> new ApiException(CSCInvalidRequest.InvalidCredentialId,
+								"No credential found with the given Id", credentialID));
+		return credential;
 	}
 }

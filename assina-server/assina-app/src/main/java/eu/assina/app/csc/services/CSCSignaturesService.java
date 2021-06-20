@@ -9,7 +9,8 @@ import eu.assina.app.csc.payload.CSCSignaturesSignHashRequest;
 import eu.assina.app.csc.payload.CSCSignaturesSignHashResponse;
 import eu.assina.app.csc.payload.CSCSignaturesTimestampRequest;
 import eu.assina.app.csc.payload.CSCSignaturesTimestampResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,15 +19,24 @@ import java.util.List;
 @Service
 public class CSCSignaturesService {
 
+	private static final Logger log = LoggerFactory.getLogger(CSCSignaturesService.class);
 	private final CredentialService credentialService;
 	private AssinaCryptoService cryptoService;
+	private CSCSADProvider sadProvider;
 
-	public CSCSignaturesService(@Autowired CredentialService credentialService,
-								@Autowired AssinaCryptoService cryptoService) {
+	public CSCSignaturesService(CredentialService credentialService,
+								AssinaCryptoService cryptoService,
+								CSCSADProvider sadProvider) {
 		this.credentialService = credentialService;
 		this.cryptoService = cryptoService;
+		this.sadProvider = sadProvider;
 	}
 
+	/**
+	 * Sign the provided hash with the credential specified in the request
+	 * @param signHashRequest
+	 * @return
+	 */
 	public CSCSignaturesSignHashResponse signHash(CSCSignaturesSignHashRequest signHashRequest) {
 		CSCSignaturesSignHashResponse response = new CSCSignaturesSignHashResponse();
 		final String credentialID = signHashRequest.getCredentialID();
@@ -36,8 +46,11 @@ public class CSCSignaturesService {
 						() -> new ApiException(CSCInvalidRequest.InvalidCredentialId,
 								"No credential found with the given Id", credentialID));
 
-		// TODO can the SAD be a JWT
-		validateSAD(signHashRequest.getSAD());
+		// we know SAD is not empty thanks to annotations in the DTO, but is it valid?
+        // if it is expired or otherwise invalid, the provider will throw the right
+		// exception for the CSC standard
+        sadProvider.validateSAD(signHashRequest.getSAD());
+
 		// assume our sign algo has no params and our hashAlgo is implied by the signalgo
 		final List<String> hashes = signHashRequest.getHash();
 		List<String> signedHashes = new ArrayList<>();
@@ -55,12 +68,8 @@ public class CSCSignaturesService {
 		return response;
 	}
 
-	private void validateSAD(String SAD) {
-		throw new IllegalStateException("Not yet implemented: SAD Validation");
-		// TODO validate SAD as a JWT
-	}
-
 	public CSCSignaturesTimestampResponse generateTimestamp(CSCSignaturesTimestampRequest timestampRequest) {
-		throw new IllegalStateException("Not Yet Implemented"); // TODO implement this
+		log.error("Generate Timestamp is not supported by Assina");
+		throw new IllegalStateException("Not Supported by Assina Implemented"); // TODO implement this
 	}
 }

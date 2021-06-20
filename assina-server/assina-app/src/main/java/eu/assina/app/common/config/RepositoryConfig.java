@@ -31,11 +31,13 @@ class RepositoryConfig {
 				admin.setRole(RoleName.ROLE_ADMIN.name());
 				// TODO admin password should be a setup feature - document this
 				admin.setPassword(passwordEncoder.encode("admin"));
+				admin.setEncodedPIN(passwordEncoder.encode("1234"));
 				userRepo.save(admin);
 				log.info("Added admin user {}", admin.getName());
 				User bob = new User("bob", "bob", "bob@assina.eu", AuthProvider.local);
 				bob.setRole(RoleName.ROLE_USER.name());
 				bob.setPassword(passwordEncoder.encode("bob"));
+				bob.setEncodedPIN(passwordEncoder.encode("1234"));
 				userRepo.save(bob);
 				log.info("Added regular user {}", bob.getName());
 			}

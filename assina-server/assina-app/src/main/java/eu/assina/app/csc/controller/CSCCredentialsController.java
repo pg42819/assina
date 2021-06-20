@@ -1,14 +1,16 @@
 package eu.assina.app.csc.controller;
 
-import eu.assina.app.common.error.ApiException;
-import eu.assina.app.csc.error.CSCInvalidRequest;
-import eu.assina.app.csc.payload.*;
+import eu.assina.app.csc.payload.CSCCredentialsAuthorizeRequest;
+import eu.assina.app.csc.payload.CSCCredentialsAuthorizeResponse;
+import eu.assina.app.csc.payload.CSCCredentialsInfoRequest;
+import eu.assina.app.csc.payload.CSCCredentialsInfoResponse;
+import eu.assina.app.csc.payload.CSCCredentialsListRequest;
+import eu.assina.app.csc.payload.CSCCredentialsListResponse;
 import eu.assina.app.csc.services.CSCCredentialsService;
 import eu.assina.app.security.CurrentUser;
 import eu.assina.app.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -152,9 +154,16 @@ public class CSCCredentialsController
 	 *   This method SHALL NOT be used in case of “oauth2” credential authorization;
 	 *   instead, any of the available OAuth 2.0 authorization mechanisms SHALL be used.
 	 *
-	 * OPTIONAL: NOT YET IMPLEMENTED IN ASSINA
 	 */
-     //	@PostMapping("authorize")
+     @PostMapping("authorize")
+	 @ResponseStatus(HttpStatus.OK)
+	public CSCCredentialsAuthorizeResponse authorize(
+			 @CurrentUser UserPrincipal userPrincipal,
+			 @Valid @RequestBody CSCCredentialsAuthorizeRequest authorizeRequest) {
+		 CSCCredentialsAuthorizeResponse response =
+				 credentialsService.authorizeCredential(userPrincipal, authorizeRequest);
+		 return response;
+	 }
 
 	/**
 	 * extendTransaction
@@ -169,7 +178,7 @@ public class CSCCredentialsController
 	 *   The RSSP SHALL invalidate the SAD when the number of authorized signatures, specified with
 	 *   numSignatures in the credential authorization event, has been created.
 	 *
-	 * OPTIONAL: NOT YET IMPLEMENTED IN ASSINA
+	 * OPTIONAL: NOT IMPLEMENTED IN ASSINA
      */
 	// @PostMapping("extendTransaction")
 
@@ -177,7 +186,7 @@ public class CSCCredentialsController
  	 * sendOTP
 	 * Described in 11.8 of the CSC Spec
 	 *
-	 * NOT IMPLEMENTED IN ASSINA: OAUTH2 is used instead
+	 * NOT IMPLEMENTED IN ASSINA: PIN is used instead
 	 */
 	// @PostMapping("sendOTP")
  }

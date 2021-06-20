@@ -1,5 +1,6 @@
 package eu.assina.app.common.config;
 
+import eu.assina.app.security.jwt.JwtProviderConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
@@ -11,37 +12,7 @@ public class AppProperties {
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();
 
-    public static class Auth {
-        private String tokenSecret;
-        private long tokenExpirationMsec;
-
-        // passphrase for symmetrical data-at-rest encrpytion for private keys
-        private String passphrase;
-
-        public String getTokenSecret() {
-            return tokenSecret;
-        }
-
-        public void setTokenSecret(String tokenSecret) {
-            this.tokenSecret = tokenSecret;
-        }
-
-        public long getTokenExpirationMsec() {
-            return tokenExpirationMsec;
-        }
-
-        public void setTokenExpirationMsec(long tokenExpirationMsec) {
-            this.tokenExpirationMsec = tokenExpirationMsec;
-        }
-
-        public String getPassphrase() {
-            return passphrase;
-        }
-
-        public void setPassphrase(String passphrase) {
-            this.passphrase = passphrase;
-        }
-    }
+    public static class Auth extends JwtProviderConfig  {}
 
     public static final class OAuth2 {
         private List<String> authorizedRedirectUris = new ArrayList<>();

@@ -9,5 +9,6 @@ import java.lang.annotation.*;
 @Documented
 @AuthenticationPrincipal
 public @interface CurrentUser {
+    // TODO look up if Current User is necessary and use AuthenticationPrincipal if not
 
 }

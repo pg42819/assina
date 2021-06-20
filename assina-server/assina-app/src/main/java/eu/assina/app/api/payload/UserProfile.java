@@ -2,6 +2,9 @@ package eu.assina.app.api.payload;
 
 import java.time.Instant;
 
+/**
+ * Wrapper around the user object for display a user profile
+ */
 public class UserProfile {
     private String id;
     private String username;

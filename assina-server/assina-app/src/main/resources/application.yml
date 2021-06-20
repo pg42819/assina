@@ -51,8 +51,10 @@ spring:
 # Override these with matching env vars like ASSINA_AUTH_PASSPHRASE
 assina:
   auth: # todo generate a token secret to share with the client side
-    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
-    tokenExpirationMsec: 864000000
+    type: userAuthentication
+    tokenSecret: 217A25432A462D4A614E645267556B58
+    lifetimeMinutes: 600
+
   oauth2:
     # Redirect to webapp with our own JWT token after authenticating with oauth2 provider
     # TODO set this to the actual URL of the web app
@@ -86,7 +88,15 @@ csc:
     signatureAlgorithm: SHA256WithRSA
     # Passphrase used for encrypting private key at rest in the database
     # WARNING: This should be overridden with the (more secure) env var: CSC_CRYPTO_PASSPHRASE
-    passphrase: foo
+    passphrase: 442A472D4B6150645367566B59703373
+
+  # configuration for the JWT provider for SAD tokens
+  sad:
+    type: SAD
+    lifetimeMinutes: 5
+    # WARNING: This should be generated at install time
+    tokenSecret: 2B4B6250655368566D59713374367639
+
   api:
     pageSize: 20 # if a client does not specify maxResults this is the default page size
     maxPageSize: 100 # even if a client does specify maxResults we limit it to this to avoid DOS
@@ -116,4 +126,4 @@ logging:
   level:
     org:
       springframework:
-        security: INFO
+        security: TRACE

@@ -19,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static eu.assina.app.common.util.Constants.CSC_URL_ROOT;
+import static eu.assina.app.common.config.AssinaConstants.CSC_URL_ROOT;
 
 @Configuration
 @EnableWebSecurity
