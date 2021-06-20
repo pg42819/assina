@@ -4,6 +4,7 @@ import './Sign.css';
 import { sign } from '../../util/APIUtils';
 import axios from 'axios';
 import Alert from 'react-s-alert';
+import { ACCESS_TOKEN } from '../../constants';
 
 
 class Sign extends Component {
@@ -12,7 +13,20 @@ class Sign extends Component {
         console.log(props);
         this.state = {file: '', msg: '', pin: ''};
     
+        var token = localStorage.getItem(ACCESS_TOKEN);
+
+        const headers = { 
+	        'Authorization': 'Bearer '+token
+        };
+
         this.handleInputChange = this.handleInputChange.bind(this);
+
+        axios.post('http://localhost:8080/csc/v1/credentials/list', {headers}).then(res=>{
+            console.log(res);
+        }).catch(error=>{
+            console.log(error);
+        })
+
     }
 
 	onFileChange = (event) => {
@@ -72,7 +86,7 @@ class Sign extends Component {
                     <input type="file" name="file" onChange={this.onFileChange}/>
                 </div>
                 <div>
-                    <input type="password" pattern="[0-9]*" name="pin" placeholder="Pin"
+                    <input type="password" pattern="[0-9][0-9][0-9][0-9]" name="pin" placeholder="Pin"
                             value={this.state.pin}    onChange={this.handleInputChange} required/>
                 </div>
                 <div>
