@@ -148,12 +148,33 @@ public class CSCCredentialsController
 	}
 
 	/**
-	 * authorize
+	 * Authorizes a specified credential to sign a request, by returning a SAD to use
+	 * Per 11.6 of the CSC Spec.
+	 * The SAD has a 5 minute limit.
 	 *
-	 * Per 11.6 of the CSC Spec:
-	 *   This method SHALL NOT be used in case of “oauth2” credential authorization;
-	 *   instead, any of the available OAuth 2.0 authorization mechanisms SHALL be used.
+	 * Example request:
+	 *   POST /csc/v1/credentials/authorize HTTP/1.1
+	 *   Host: service.domain.org
+	 *   Content-Type: application/json
+	 *   Authorization: Bearer 4/CKN69L8gdSYp5_pwH3XlFQZ3ndFhkXf9P2_TiHRG-bA
 	 *
+	 *   {
+	 *     "credentialID": "GX0112348",   "numSignatures": 2,   "hash":
+	 *     [
+	 *       "sTOgwOm+474gFj0q0x1iSNspKqbcse4IeiqlDg/HWuI=",
+	 *       "c1RPZ3dPbSs0NzRnRmowcTB4MWlTTnNwS3FiY3NlNEllaXFsRGcvSFd1ST0="   ],
+	 *     "PIN": "12345678",
+	 *     "OTP": "738496",
+	 *     "clientData": "12345678"
+	 *   }
+	 *
+	 * Example response:
+	 *   HTTP/1.1 200 OK
+	 *   Content-Type: application/json;charset=UTF-8
+	 *   {
+	 *     "SAD":
+	 *     "_TiHRG-bAH3XlFQZ3ndFhkXf9P24/CKN69L8gdSYp5_pw"
+	 *   }
 	 */
      @PostMapping("authorize")
 	 @ResponseStatus(HttpStatus.OK)

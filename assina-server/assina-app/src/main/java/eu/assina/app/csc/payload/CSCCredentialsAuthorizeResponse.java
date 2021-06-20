@@ -1,5 +1,7 @@
 package eu.assina.app.csc.payload;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ public class CSCCredentialsAuthorizeResponse {
     // The lifetime in seconds of the SAD. If omitted, the default expiration time is 3600 (1 hour).
     private long expiresIn;
 
+    @JsonProperty("SAD") // must be uppercase
     public String getSAD() {
         return SAD;
     }

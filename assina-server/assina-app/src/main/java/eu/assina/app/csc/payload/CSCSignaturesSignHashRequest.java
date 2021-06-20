@@ -1,9 +1,9 @@
 package eu.assina.app.csc.payload;
 
-import eu.assina.app.common.error.ApiException;
-import org.springframework.util.StringUtils;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -20,12 +20,13 @@ public class CSCSignaturesSignHashRequest {
     // REQUIRED
     // The Signature Activation Data returned by the Credential Authorization methods.
     @NotBlank(message  = "MissingSAD")
+    @JsonProperty("SAD") // must be uppercase
     private String SAD;
 
     // REQUIRED
     // One or more hash values to be signed.
     // This parameter SHALL contain the Base64-encoded raw message digest(s).
-    @NotBlank(message  = "InvalidHashArray")
+    @NotEmpty(message  = "InvalidHashArray")
     private List<String> hash;
 
     // REQUIRED_Conditional

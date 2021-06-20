@@ -66,12 +66,14 @@ demo:
     - name: Ana Banana
       username: ana
       plainPassword: ana
+      plainPIN: 1234
       email: ana@example.com
       role: ROLE_ADMIN
       numCredentials: 1
     - name: Carlos Santana
       username: carlos
       plainPassword: carlos
+      plainPIN: 1234
       role: ROLE_USER
       email: carlos@example.com
       numCredentials: 3
@@ -106,22 +108,20 @@ csc:
     name: Assina
     # TODO create a log, serve it statically and move this into the InfoService
     logo: "https://service.domain.org/images/logo.png"
-    region: "IT" # TODO fix region and lang
+    # Server is established in portugal, but language is en-US only
+    region: "PT"
     lang: "en-US"
     description: "A remove signature service by Assina for LEI 2021 at UMinho"
     authType:
-      - basic
       - oauth2code
-    oauth2: "https://www.domain.org/" # TODO determine how to replace this with external
-    methods: # TODO update with actual methods we support. Consider doing this dynamically
-      - auth/login
-      - auth/revoke
+    # google oauth
+    oauth2: "google oauth"
+    methods:
       - credentials/list
       - credentials/info
       - credentials/authorize
       - credentials/sendOTP
       - signatures/signHash
-
 logging:
   level:
     org:

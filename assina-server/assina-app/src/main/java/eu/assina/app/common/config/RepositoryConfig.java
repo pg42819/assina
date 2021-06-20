@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Instant;
 import java.util.List;
 
 @Configuration
@@ -51,14 +52,20 @@ class RepositoryConfig {
 					} else {
 						User user = new User(demoUser.getUsername(), demoUser.getName(), demoUser.getEmail(), AuthProvider.local);
 						user.setEmail(demoUser.getEmail());
-						user.setPassword(passwordEncoder.encode(demoUser.getPlainPassword()));
+						String demoPassword = demoUser.getPlainPassword();
+						user.setPassword(passwordEncoder.encode(demoPassword));
 						user.setRole(demoUser.getRole());
+						String demoPIN = demoUser.getPlainPIN();
+						user.setEncodedPIN(passwordEncoder.encode(demoPIN));
+						user.setCreatedAt(Instant.now());
+						user.setUpdatedAt(Instant.now());
 						userRepo.save(user);
 						log.info("Added demo user {} with role: {}", demoUser.getName(), demoUser.getRole());
 						for (int i = 0; i < demoUser.getNumCredentials(); i++) {
 						    // add credentials for the demo user
 							credentialService.createCredential(user.getId(), user.getUsername());
-							log.info("Created demo credential for user {}", user.getUsername());
+							log.info("Created demo credential for user {} with password {} and PIN {}",
+									user.getUsername(), demoPassword, demoPIN);
 						}
 					}
 				}

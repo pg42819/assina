@@ -12,7 +12,9 @@ import eu.assina.app.csc.payload.CSCSignaturesTimestampResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,8 @@ public class CSCSignaturesService {
 	 * @param signHashRequest
 	 * @return
 	 */
-	public CSCSignaturesSignHashResponse signHash(CSCSignaturesSignHashRequest signHashRequest) {
+	public CSCSignaturesSignHashResponse signHash(
+			@Valid @RequestBody CSCSignaturesSignHashRequest signHashRequest) {
 		CSCSignaturesSignHashResponse response = new CSCSignaturesSignHashResponse();
 		final String credentialID = signHashRequest.getCredentialID();
 

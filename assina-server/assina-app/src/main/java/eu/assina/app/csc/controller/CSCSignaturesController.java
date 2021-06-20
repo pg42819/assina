@@ -3,11 +3,15 @@ package eu.assina.app.csc.controller;
 import eu.assina.app.csc.payload.*;
 import eu.assina.app.csc.services.CSCSignaturesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * Signatures endpoints from:
@@ -68,7 +72,8 @@ public class CSCSignaturesController
 	 */
 	@PostMapping("signHash")
 	@ResponseStatus(HttpStatus.OK)
-	public CSCSignaturesSignHashResponse signHash(CSCSignaturesSignHashRequest signHashRequest)
+	public CSCSignaturesSignHashResponse signHash(
+			@Valid @RequestBody CSCSignaturesSignHashRequest signHashRequest)
 	{
 		CSCSignaturesSignHashResponse response = signaturesService.signHash(signHashRequest);
 		return response;
@@ -107,7 +112,8 @@ public class CSCSignaturesController
 	 */
 	@PostMapping("timestamp")
 	@ResponseStatus(HttpStatus.OK)
-	public CSCSignaturesTimestampResponse timestamp(CSCSignaturesTimestampRequest timestampRequest)
+	public CSCSignaturesTimestampResponse timestamp(
+			@Valid @RequestBody CSCSignaturesTimestampRequest timestampRequest)
 	{
 		CSCSignaturesTimestampResponse response = signaturesService.generateTimestamp(timestampRequest);
 		return response;

@@ -1,6 +1,7 @@
 package eu.assina.app.csc.payload;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.assina.app.common.config.AssinaConstants;
 import eu.assina.app.common.error.ApiException;
 import eu.assina.app.csc.error.CSCInvalidRequest;
@@ -52,9 +53,11 @@ public class CSCCredentialsAuthorizeRequest {
     // It SHALL be used only when authMode from credentials/info is “explicit” and PIN/presence is not “false”.
     // ASSINA expects a 4 digit pin but hashed with bcrpyt (so not numeric here)
     @NotBlank(message = "InvalidPin")
+    @JsonProperty("PIN") // must be uppercase
     private String PIN;
 
     // not used in Assina
+    @JsonProperty("OTP") // must be uppercase
     private String OTP;
 
     // A free form description of the authorization transaction in the lang language.
