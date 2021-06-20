@@ -1,10 +1,12 @@
 package eu.assina.app.common.error;
 
+import eu.assina.app.csc.error.CSCInvalidRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -37,6 +39,38 @@ public class ApiExceptionHandler
 		ApiError apiError = ((ApiException)ae).getApiError();
 		String message = ae.getMessage();
 		return apiErrorToResponse(apiError, message, ae, request);
+	}
+
+	/**
+	 * Handle validation errors that are triggered by @Valid in the controllors and named by validation
+	 * constraints on the payload methods like @NotNull or @NotBlank.
+	 *
+	 * The custom messages in these annotations match enum names for CSC or API errors so that the
+	 * validation error can be converted to the proper error response body (according to the CSC spec)
+	 */
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+																  HttpHeaders headers,
+																  HttpStatus status,
+																  WebRequest request) {
+		ApiError apiError;
+		if (ex.hasFieldErrors()) {
+			final String error = ex.getFieldError().getDefaultMessage();
+			try {
+				apiError = CSCInvalidRequest.valueOf(error);
+			} catch (IllegalArgumentException e) {
+				// this is a legitimate case: the validation exception is not a CSC error, try Assina
+				try {
+					apiError = AssinaError.valueOf(error);
+				} catch (IllegalArgumentException e2) {
+					apiError = AssinaError.UnexpectedValidationError;
+				}
+			}
+		}
+		else {
+			apiError = AssinaError.UnexpectedValidationError;
+		}
+		return apiErrorToResponse(apiError, ex.getMessage(), ex, request);
 	}
 
 	@Override

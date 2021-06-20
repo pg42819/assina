@@ -6,6 +6,9 @@ import eu.assina.app.csc.error.CSCInvalidRequest;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import static eu.assina.app.csc.error.CSCInvalidRequest.MissingCredentialId;
 
 /**
  * Body for request of credentials/info - information about a specific credential record
@@ -21,7 +24,7 @@ public class CSCCredentialsInfoRequest extends AbstractLangRequest{
 
     // REQUIRED
     // The unique identifier associated to the credential.
-    @NotBlank
+    @NotBlank(message = "MissingCredentialId")
     private String credentialID;
 
     // OPTIONAL
@@ -99,31 +102,22 @@ public class CSCCredentialsInfoRequest extends AbstractLangRequest{
         this.clientData = clientData;
     }
 
-    /**
-     * Fail if the request does not match the standard - according to CSC spec 11.5
-     */
-    public void validate() {
-        if (StringUtils.hasText(certificates)) {
-            try {
-                _certsRequest = CertsRequest.valueOf(certificates);
-            } catch (IllegalArgumentException e) {
-                // certificates was not one of none, single or chain, which is an error
-                throw new ApiException(CSCInvalidRequest.InvalidCertificatesParameter);
-            }
-        }
-        else{
-            // certificates is optional and defaults to single
-            _certsRequest = CertsRequest.single;
-        }
-
-        if (!StringUtils.hasText(credentialID)) {
-            throw new ApiException(CSCInvalidRequest.MissingCredentialId);
-        }
-    }
-
     /** helper to convert the string certificates property to an enum */
     public CertsRequest getCertsRequest() {
+        if (_certsRequest == null) {
+            if (StringUtils.hasText(certificates)) {
+                try {
+                    _certsRequest = CertsRequest.valueOf(certificates);
+                } catch (IllegalArgumentException e) {
+                    // certificates was not one of none, single or chain, which is an error
+                    throw new ApiException(CSCInvalidRequest.InvalidCertificatesParameter);
+                }
+            }
+            else{
+                // certificates is optional and defaults to single
+                _certsRequest = CertsRequest.single;
+            }
+        }
         return _certsRequest;
     }
-
 }

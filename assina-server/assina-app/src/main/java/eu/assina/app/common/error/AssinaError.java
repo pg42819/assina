@@ -18,6 +18,10 @@ public enum AssinaError implements ApiError {
       "The object in the request is invalid", 400),
 
   // Failing all else general CredentialStore error
+  UnexpectedValidationError("assina_unexpected_validiation",
+          "An unexpected validation error occurred in the Assina RSSP", 400),
+
+  // Failing all else general CredentialStore error
   UnexpectedError("assina_unexpected_error",
       "An unexpected internal error occurred in the Assina RSSP", 500),
 

@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Custom user details service for loading the user by username or email during authenticated requests
  */
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class AssinaUserDetailsService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;

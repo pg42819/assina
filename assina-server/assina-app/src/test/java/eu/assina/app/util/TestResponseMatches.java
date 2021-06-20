@@ -1,5 +1,6 @@
 package eu.assina.app.util;
 
+import eu.assina.app.common.error.ApiError;
 import eu.assina.app.common.error.AssinaError;
 import org.springframework.test.web.servlet.ResultMatcher;
 
@@ -35,7 +36,7 @@ public class TestResponseMatches {
    *
    * @return a result matcher for error responses
    */
-  public static ResultMatcher validateCSCErrorResponse(AssinaError expectedError) {
+  public static ResultMatcher validateCSCErrorResponse(ApiError expectedError) {
     return ResultMatcher.matchAll(
         jsonPath("$.error", expectedError == null ? notNullValue() : is(expectedError.getCode())),
         jsonPath("$.error_description", notNullValue())

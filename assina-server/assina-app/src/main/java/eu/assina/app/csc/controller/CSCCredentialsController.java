@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Credentials endpoints from:
@@ -70,17 +69,11 @@ public class CSCCredentialsController
 	public CSCCredentialsListResponse list(@CurrentUser UserPrincipal userPrincipal,
 										   @Valid @RequestBody(required = false) CSCCredentialsListRequest listRequest)
 	{
-		// Note required=false: if client POSTS with no body, we can add the current principal anyway
+		// Note required=false: if client POSTS with no body, we create one to add the currentuser
 		if (listRequest == null) {
 			listRequest = new CSCCredentialsListRequest();
 		}
-		// tODO add validation
-		// id must be from logged in user only - user-specified
-		if (StringUtils.hasText(listRequest.getUserId())) {
-			throw new ApiException(CSCInvalidRequest.NonNullUserId);
-		}
 		listRequest.setUserId(userPrincipal.getId());
-
 		CSCCredentialsListResponse credentialsList =
 				credentialsService.listCredentials(listRequest);
 		return credentialsList;

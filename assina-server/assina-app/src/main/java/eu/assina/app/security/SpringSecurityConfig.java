@@ -31,7 +31,7 @@ import static eu.assina.app.common.util.Constants.CSC_URL_ROOT;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private AssinaUserDetailsService customUserDetailsService;
 
     @Autowired
     private AssinaOAuth2UserService customOAuth2UserService;

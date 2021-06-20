@@ -4,6 +4,8 @@ import com.nimbusds.oauth2.sdk.AbstractRequest;
 import eu.assina.app.common.util.Constants;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.Null;
+
 /**
  * Body for request of credentials/list - a list, possibly paginated, of credential IDs
  * From section 11.4 of the CSC API V_1.0.4.0 spec
@@ -17,6 +19,9 @@ public class CSCCredentialsListRequest implements CSCRequest {
     // If a user-specific service authorization is present, it SHALL NOT be allowed to use this parameter to
     // obtain the list of credentials associated to a different user.
     // The remote service SHALL return an error in such case.
+    // ASSINA: always throw an error if the userID is specified (see SHALL NOT above)
+
+    @Null(message = "NonNullUserId")
     private String userId;
 
     // OPTIONAL

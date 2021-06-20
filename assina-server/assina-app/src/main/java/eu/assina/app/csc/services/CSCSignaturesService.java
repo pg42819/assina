@@ -28,7 +28,6 @@ public class CSCSignaturesService {
 	}
 
 	public CSCSignaturesSignHashResponse signHash(CSCSignaturesSignHashRequest signHashRequest) {
-		signHashRequest.validate();
 		CSCSignaturesSignHashResponse response = new CSCSignaturesSignHashResponse();
 		final String credentialID = signHashRequest.getCredentialID();
 
