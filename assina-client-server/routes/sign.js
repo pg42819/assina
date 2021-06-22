@@ -53,7 +53,7 @@ router.post('/', function(req, res, next) {
 
         axios.post('http://localhost:8080/csc/v1/signatures/signHash', bodyHash, {
             headers: headers
-        }).then(res => console.log(res))
+        }).then(res => console.log(res.data.signatures))
             .catch(error => console.log(error));
     }).catch(error => {
         console.log(error);

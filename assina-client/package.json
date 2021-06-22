@@ -8,9 +8,11 @@
     "password-hash": "^1.2.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-dropdown-select": "^4.7.4",
     "react-router-dom": "^4.3.1",
     "react-s-alert": "^1.4.1",
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "react-select": "^4.3.1"
   },
   "scripts": {
     "start": "react-scripts start",

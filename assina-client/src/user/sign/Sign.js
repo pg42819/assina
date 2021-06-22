@@ -5,13 +5,14 @@ import { sign, createCredential } from '../../util/APIUtils';
 import axios from 'axios';
 import Alert from 'react-s-alert';
 import {ACCESS_TOKEN, API_BASE_URL, CSC_BASE_URL} from '../../constants';
+import Select from 'react-dropdown-select';
 
 
 class Sign extends Component {
     constructor(props) {
         super(props);
         console.log(props);
-        this.state = {file: '', msg: '', pin: '', credential: '', token: ''};
+        this.state = {file: '', msg: '', pin: '', credentials: [], token: '', selectedCredential: ''};
 
         this.state.token = localStorage.getItem(ACCESS_TOKEN);
 
@@ -20,6 +21,7 @@ class Sign extends Component {
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.changeCredential = this.changeCredential.bind(this);
 
         axios.post(CSC_BASE_URL + '/credentials/list',
             {},
@@ -27,18 +29,13 @@ class Sign extends Component {
                 headers: headers
             }).then(res=>{
             if(res.data.credentialIDs.length == 0) {
-                createCredential(this.state.token).then(res => {
-                    this.setState({
-                        credential: res
-                    })
-                    console.log(this.state.credential);
-                })
+                console.log("NO CREDENTIALS");
             }
             else {
-                console.log(res.data.credentialIDs[0]);
                 this.setState({
-                    credential: res.data.credentialIDs[0]
+                    credentials: res.data.credentialIDs
                 })
+                console.log(this.state.credentialIDs);
             }
         }).catch(error=>{
             console.log(error);
@@ -55,11 +52,13 @@ class Sign extends Component {
 	uploadFileData = (event) => {
 		event.preventDefault();
 
+        console.log(this.state.selectedCredential);
+
         const data = new FormData();
         data.append('file', this.state.file);
         data.append('token', this.state.token);
         data.append('pin', this.state.pin);
-        data.append('credential', this.state.credential);
+        data.append('credential', this.state.selectedCredential);
 
         console.log(this.state.token);
 
@@ -81,8 +80,15 @@ class Sign extends Component {
         });
     }
 
-    render() {
+    changeCredential= (event) => {
+        this.setState({
+            selectedCredential: event.target.value
+        })
+        console.log(this.state.selectedCredential);
+    }
 
+    render() {
+        const {creds} = this.state.credentials;
         return (
             <div className="sign-container">
                 <div className="container">
@@ -103,16 +109,23 @@ class Sign extends Component {
                     </div>
                 </div>
                 <form>
-                <div>
-                    <input type="file" name="file" onChange={this.onFileChange}/>
-                </div>
-                <div>
-                    <input type="password" pattern="[0-9][0-9][0-9][0-9]" name="pin" placeholder="Pin"
-                            value={this.state.pin}    onChange={this.handleInputChange} required/>
-                </div>
-                <div>
-                        <button type="button" className="btn" onClick={this.uploadFileData}>Upload</button>
-                </div>
+                    <select onChange={this.changeCredential}>
+                        {this.state.credentials .map(c => {
+                        return (
+                            <option key={c} value={c}> {c} </option>
+                        )
+                        })}
+                    </select>
+                    <div>
+                        <input type="file" name="file" onChange={this.onFileChange}/>
+                    </div>
+                    <div>
+                        <input type="password" pattern="[0-9][0-9][0-9][0-9]" name="pin" placeholder="Pin"
+                                value={this.state.pin}    onChange={this.handleInputChange} required/>
+                    </div>
+                    <div>
+                            <button type="button" className="btn" onClick={this.uploadFileData}>Upload</button>
+                    </div>
                 </form>
             </div>
         );
