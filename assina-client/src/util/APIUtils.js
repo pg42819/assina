@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { ASSINA_RSSP_BASE_URL, API_BASE_URL, CSC_BASE_URL, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
@@ -56,4 +57,20 @@ export function sign(signRequest) {
         method: 'POST',
         body: JSON.stringify(signRequest)
     });
+}
+
+export function createCredential(token) {
+    const headers = {
+        'Authorization': 'Bearer '+token
+    };
+
+    return axios.post(API_BASE_URL+'/credentials', 
+            {},
+            {
+                headers: headers
+            }).then(res => {
+                console.log(res);
+            }).catch(error => {
+                console.log(error);
+            });
 }

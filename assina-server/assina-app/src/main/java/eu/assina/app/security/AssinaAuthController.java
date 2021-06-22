@@ -75,6 +75,7 @@ public class AssinaAuthController {
         user.setEmail(signUpRequest.getEmail());
         user.setProvider(AuthProvider.local);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setEncodedPIN(passwordEncoder.encode(signUpRequest.getPin()));
         user.setRole(RoleName.ROLE_USER.name());
 
         User result = userRepository.save(user);

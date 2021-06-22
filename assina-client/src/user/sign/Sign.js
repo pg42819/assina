@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './Sign.css';
-import { sign } from '../../util/APIUtils';
+import { sign, createCredential } from '../../util/APIUtils';
 import axios from 'axios';
 import Alert from 'react-s-alert';
 import {ACCESS_TOKEN, API_BASE_URL, CSC_BASE_URL} from '../../constants';
@@ -11,12 +11,12 @@ class Sign extends Component {
     constructor(props) {
         super(props);
         console.log(props);
-        this.state = {file: '', msg: '', pin: ''};
+        this.state = {file: '', msg: '', pin: '', credential: '', token: ''};
 
-        var token = localStorage.getItem(ACCESS_TOKEN);
+        this.state.token = localStorage.getItem(ACCESS_TOKEN);
 
         const headers = {
-	        'Authorization': 'Bearer '+token
+	        'Authorization': 'Bearer '+this.state.token
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,7 +26,20 @@ class Sign extends Component {
             {
                 headers: headers
             }).then(res=>{
-            console.log(res);
+            if(res.data.credentialIDs.length == 0) {
+                createCredential(this.state.token).then(res => {
+                    this.setState({
+                        credential: res
+                    })
+                    console.log(this.state.credential);
+                })
+            }
+            else {
+                console.log(res.data.credentialIDs[0]);
+                this.setState({
+                    credential: res.data.credentialIDs[0]
+                })
+            }
         }).catch(error=>{
             console.log(error);
         })
@@ -44,7 +57,11 @@ class Sign extends Component {
 
         const data = new FormData();
         data.append('file', this.state.file);
+        data.append('token', this.state.token);
         data.append('pin', this.state.pin);
+        data.append('credential', this.state.credential);
+
+        console.log(this.state.token);
 
         axios.post('http://localhost:8000/sign', data, {
 
