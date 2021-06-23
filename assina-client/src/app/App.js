@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   Route,
-  Switch
+  Switch,
+  useHistory
 } from 'react-router-dom';
 import AppHeader from '../common/AppHeader';
 import Home from '../home/Home';
@@ -56,12 +57,14 @@ class App extends Component {
   }
 
   handleLogout() {
+
     localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
       authenticated: false,
       currentUser: null
     });
     Alert.success("You're safely logged out!");
+    window.location.href = '/';
   }
 
   componentDidMount() {

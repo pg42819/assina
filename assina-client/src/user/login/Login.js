@@ -27,13 +27,13 @@ class Login extends Component {
     }
 
     render() {
-        if(this.props.authenticated) {
+        /*if(this.props.authenticated) {
             return <Redirect
                 to={{
                 pathname: "/profile",
                 state: { from: this.props.location }
             }}/>;
-        }
+        }*/
 
         return (
             <div className="login-container">
@@ -97,7 +97,8 @@ class LoginForm extends Component {
         .then(response => {
             localStorage.setItem(ACCESS_TOKEN, response.accessToken);
             Alert.success("You're successfully logged in!");
-            this.props.history.push("/profile");
+            //this.props.history.push("/profile");
+            window.location.href='/profile';
         }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         });
