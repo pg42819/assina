@@ -1,6 +1,5 @@
 package eu.assina.sa.client;
 
-import eu.assina.common.ApiErrorResponse;
 import eu.assina.csc.payload.CSCCredentialsAuthorizeRequest;
 import eu.assina.csc.payload.CSCCredentialsAuthorizeResponse;
 import eu.assina.csc.payload.CSCCredentialsInfoRequest;
@@ -11,7 +10,6 @@ import eu.assina.csc.payload.CSCSignaturesSignHashRequest;
 import eu.assina.csc.payload.CSCSignaturesSignHashResponse;
 import eu.assina.sa.config.RSSPClientConfig;
 import eu.assina.sa.error.CredentialNotFoundException;
-import eu.assina.sa.error.InternalErrorException;
 import eu.assina.sa.error.InvalidRequestException;
 import eu.assina.sa.error.RSSPClientException;
 import eu.assina.sa.model.AssinaSigner;
@@ -19,10 +17,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import sun.security.krb5.internal.APOptions;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
