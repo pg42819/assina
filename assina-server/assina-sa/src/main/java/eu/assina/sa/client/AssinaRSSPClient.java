@@ -168,6 +168,7 @@ public class AssinaRSSPClient implements AssinaSigner {
         CSCCredentialsAuthorizeRequest request = new CSCCredentialsAuthorizeRequest();
         request.setPIN(PIN);
         request.setCredentialID(credentialID);
+        request.setNumSignatures(1);
         final CSCCredentialsAuthorizeResponse response = requestAuthorizeCredential(request).block();
         final String sad = response.getSAD();
         return sad;
