@@ -1361,6 +1361,85 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "SA",
+			"item": [
+				{
+					"name": "Upload file",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/cwerner/um/lei/projetos.pdf"
+								},
+								{
+									"key": "pin",
+									"value": "1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8081/signFile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"signFile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/downloadFile/projetos_signed.pdf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"downloadFile",
+								"projetos_signed.pdf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
