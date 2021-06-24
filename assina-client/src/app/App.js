@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import {
   Route,
-  Switch
+  Switch,
+  useHistory
 } from 'react-router-dom';
 import AppHeader from '../common/AppHeader';
 import Home from '../home/Home';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Sign from '../user/sign/Sign';
+import ManageUsers from '../admin/manageUsers/ManageUsers'
 import Profile from '../user/profile/Profile';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
@@ -16,6 +18,7 @@ import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 import PrivateRoute from '../common/PrivateRoute';
 import DocumentRoute from '../common/DocumentRoute';
+import UserManagementRoute from '../common/UserManagementRoute';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
@@ -54,12 +57,14 @@ class App extends Component {
   }
 
   handleLogout() {
+
     localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
       authenticated: false,
       currentUser: null
     });
     Alert.success("You're safely logged out!");
+    window.location.href = '/';
   }
 
   componentDidMount() {
@@ -82,7 +87,9 @@ class App extends Component {
             <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
               component={Profile}></PrivateRoute>
             <DocumentRoute path="/sign" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-              component={Sign}></DocumentRoute>           
+              component={Sign}></DocumentRoute>
+            <UserManagementRoute path="/userManagement" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
+              component={ManageUsers}></UserManagementRoute>            
             <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
             <Route path="/signup"
