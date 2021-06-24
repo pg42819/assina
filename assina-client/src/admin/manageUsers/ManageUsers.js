@@ -35,11 +35,24 @@ class ManageUsers extends Component {
         return (
             <div className="manageUsers-container">
                 <div className="container">
-                    <ul>
+                    <table id="users">
+                        <tr>
+                            <th>User ID</th>
+                            <th>Full Name</th>
+                            <th>Number of Credentials</th>
+                            <th>Date joined</th>
+                        </tr>
                         {this.state.users.map(user => {
-                            return <li key={user.id}>{user.name}</li>
+                            return (
+                                    <tr>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.credentialCount}</td>
+                                        <td>{user.joinedAt}</td>
+                                    </tr>
+                                    )
                         })}
-                    </ul>
+                    </table>
                 </div>
             </div>
         );

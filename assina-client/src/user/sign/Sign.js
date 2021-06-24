@@ -54,18 +54,23 @@ class Sign extends Component {
 
         console.log(this.state.selectedCredential);
 
+        const headers = {
+	        'Authorization': 'Bearer '+this.state.token
+        };
+
         const data = new FormData();
         data.append('file', this.state.file);
-        data.append('token', this.state.token);
         data.append('pin', this.state.pin);
         data.append('credential', this.state.selectedCredential);
 
-        console.log(this.state.token);
-
-        axios.post('http://localhost:8000/sign', data, {
-
+        axios.post('http://localhost:8081/signFile', data, {
+            headers: headers
         }).then(res => {
-            this.props.history.push("/profile");
+            this.props.history.push({
+                pathname: '/download',
+                state: {fileLink: res.data.fileDownloadUri}
+            });
+
         })
 
 	}

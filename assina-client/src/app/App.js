@@ -9,7 +9,9 @@ import Home from '../home/Home';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Sign from '../user/sign/Sign';
-import ManageUsers from '../admin/manageUsers/ManageUsers'
+import ManageUsers from '../admin/manageUsers/ManageUsers';
+import Download from '../user/download/Download';
+import DownloadRoute from '../common/DownloadRoute';
 import Profile from '../user/profile/Profile';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
@@ -89,7 +91,9 @@ class App extends Component {
             <DocumentRoute path="/sign" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
               component={Sign}></DocumentRoute>
             <UserManagementRoute path="/userManagement" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-              component={ManageUsers}></UserManagementRoute>            
+              component={ManageUsers}></UserManagementRoute>
+            <DownloadRoute path="/download" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
+              component={Download}></DownloadRoute>             
             <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
             <Route path="/signup"

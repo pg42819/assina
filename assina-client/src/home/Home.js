@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './Home.css';
+import MediaQuery from 'react-responsive';
 
 class Home extends Component {
+
     render() {
         return (
-            <div className="home-container">
+            <div style={{ width: '100%', margin: 'auto'}} className="home-container">
                 <div className="container">
                     <div className="graf-bg-container">
                         <div className="graf-layout">
