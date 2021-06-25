@@ -28,6 +28,7 @@ public enum AssinaError implements ApiError {
       "An unexpected internal error occurred in the Assina RSSP", 500),
 
   UserNotFound("user_not_found", "Could not find the requested user in Assina", 404),
+  UserDoesNotMatch("user_doesnot_match", "The user ID provided does not match that in the user object", 400),
 
   UserEmailAlreadyUsed("already_used",
           "The username or email address belongs to an existing user", 409),

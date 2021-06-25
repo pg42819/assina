@@ -30,9 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@WebMvcTest(CSCCredentialsController.class)
-//@ContextConfiguration
-//@ContextConfiguration(classes= {AssinaSecurityConfig.class, UserRepository.class, AssinaUserDetailsService.class})
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest

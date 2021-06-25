@@ -44,11 +44,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/auth/login",
+							"raw": "{{rssp-url}}/auth/login",
 							"host": [
-								"localhost"
+								"{{rssp-url}}"
 							],
-							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -77,11 +76,10 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:8080/csc/v1/info",
+							"raw": "{{rssp-url}}/csc/v1/info",
 							"host": [
-								"localhost"
+								"{{rssp-url}}"
 							],
-							"port": "8080",
 							"path": [
 								"csc",
 								"v1",
@@ -224,11 +222,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/csc/v1/credentials/list",
+							"raw": "{{rssp-url}}/csc/v1/credentials/list",
 							"host": [
-								"localhost"
+								"{{rssp-url}}"
 							],
-							"port": "8080",
 							"path": [
 								"csc",
 								"v1",
@@ -378,11 +375,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/csc/v1/credentials/info",
+							"raw": "{{rssp-url}}/csc/v1/credentials/info",
 							"host": [
-								"localhost"
+								"{{rssp-url}}"
 							],
-							"port": "8080",
 							"path": [
 								"csc",
 								"v1",
@@ -530,11 +526,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/csc/v1/credentials/authorize",
+							"raw": "{{rssp-url}}/csc/v1/credentials/authorize",
 							"host": [
-								"localhost"
+								"{{rssp-url}}"
 							],
-							"port": "8080",
 							"path": [
 								"csc",
 								"v1",
@@ -1331,6 +1326,23 @@
 				},
 				{
 					"name": "get ME regular user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Returned token\", function () {",
+									"    pm.response.to.have.status(200)",
+									"    ",
+									"});",
+									"const responseJson = pm.response.json();",
+									"var id = responseJson.id",
+									"pm.collectionVariables.set(\"user-id\", id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1354,6 +1366,46 @@
 								"api",
 								"v1",
 								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update me for regular user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"plainPIN\" : \"4567\",\n    \"email\" : \"foo@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/users/me",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
 								"me"
 							]
 						}
@@ -1391,6 +1443,11 @@
 								{
 									"key": "pin",
 									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "credentialId",
+									"value": "{{credential-id}}",
 									"type": "text"
 								}
 							]
@@ -1461,6 +1518,10 @@
 		},
 		{
 			"key": "sad",
+			"value": ""
+		},
+		{
+			"key": "user-id",
 			"value": ""
 		}
 	]

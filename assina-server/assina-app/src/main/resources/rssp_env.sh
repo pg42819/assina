@@ -4,7 +4,7 @@
 export SERVER_PORT=80
 #export SERVER_PORT=8080
 # Must point to the redirect on the node client server and port
-export ASSINA_CLIENT_BASE_URL=http://20.101.144.136:80
+export ASSINA_CLIENT_BASE_URL=http://20.101.144.136
 #export ASSINA_CLIENT_PORT=http://localhost:3000
 export LOGS=./logs
 mkdir -p $LOGS

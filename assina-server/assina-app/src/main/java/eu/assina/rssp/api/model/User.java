@@ -1,6 +1,7 @@
 package eu.assina.rssp.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -30,8 +31,9 @@ public class User extends DateAudit {
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
-    @JsonIgnore
+    @JsonIgnore // neither in nor out
     private String password;
+
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -42,6 +44,11 @@ public class User extends DateAudit {
 
     // User PIN Must be Bcrypt encoded
     private String encodedPIN;
+
+    @JsonProperty("plainPIN") // must be uppercase
+    private String plainPIN; // PIN starts in plaintext - input only
+
+    private String plainPassword; // in only - see setter
 
     public User() {
         id = UUID.randomUUID().toString();
@@ -141,5 +148,23 @@ public class User extends DateAudit {
 
     public String getEncodedPIN() {
         return encodedPIN;
+    }
+
+    @JsonIgnore // ignore plain pin on GET but allow it on set
+    public String getPlainPIN() {
+        return plainPIN;
+    }
+
+    public void setPlainPIN(String plainPIN) {
+        this.plainPIN = plainPIN;
+    }
+
+    @JsonIgnore // ignore plain password on GET but allow it on set
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
     }
 }

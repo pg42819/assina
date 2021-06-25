@@ -24,8 +24,6 @@ public class DemoProperties {
         private String name;
         private String email;
         private String role;
-        private String plainPassword; // demo users - passwords start in plaintext
-        private String plainPIN; // demo users - PIN starts in plaintext
 
         private int numCredentials;
 
@@ -69,27 +67,11 @@ public class DemoProperties {
             this.role = role;
         }
 
-        public String getPlainPassword() {
-            return plainPassword;
-        }
-
-        public void setPlainPassword(String plainPassword) {
-            this.plainPassword = plainPassword;
-        }
-
         public int getNumCredentials() {
             return numCredentials;
         }
         public void setNumCredentials(int numCredentials) {
             this.numCredentials = numCredentials;
-        }
-
-        public String getPlainPIN() {
-            return plainPIN;
-        }
-
-        public void setPlainPIN(String plainPIN) {
-            this.plainPIN = plainPIN;
         }
     }
 }
