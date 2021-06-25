@@ -11,6 +11,8 @@
 .springBeans
 .sts4-cache
 
+*.pdf
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

@@ -5,6 +5,10 @@ import { sign, createCredential } from '../../util/APIUtils';
 import axios from 'axios';
 import Alert from 'react-s-alert';
 import {ACCESS_TOKEN, API_BASE_URL, CSC_BASE_URL} from '../../constants';
+import {
+    Route,
+    Redirect
+  } from "react-router-dom";
 
 
 class Download extends Component {
@@ -12,7 +16,13 @@ class Download extends Component {
         super(props);
         console.log(props);
         this.state = {fileLink: ''};
-        
+
+    }
+
+    handleClick(event) {
+        event.preventDefault();
+        window.open(event.target.href);
+        window.location = '/profile';
     }
 
     render() {
@@ -20,7 +30,7 @@ class Download extends Component {
         return (
             <div className="download-container">
                 <div className="container">
-                    <a href={this.props.location.state.fileLink}>Download signed pdf</a>
+                    <a onClick={this.handleClick} href={this.props.location.state.fileLink}>Download signed pdf</a>
                 </div>
             </div>
         );
