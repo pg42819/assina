@@ -3,13 +3,13 @@
 # Sets up the environment and runs the spring boot server
 export ASSINA_DIR=$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )
 
-if [ -f ${ASSINA_DIR}/rssp_env.sh ]; then
-		source ${ASSINA_DIR}/rssp_env.sh
+if [ -f ${ASSINA_DIR}/sa.sh ]; then
+		source ${ASSINA_DIR}/sa.sh
 else
-		echo "Could not find rssp_env.sh in $ASSINA_DIR to setup envrionmnent"
+		echo "Could not find sa.sh in $ASSINA_DIR to setup envrionmnent"
 fi
 
-PIDFile="rssp.pid"
+PIDFile="sa.pid"
 
 function check_if_pid_file_exists {
   if [ ! -f $PIDFile ]
