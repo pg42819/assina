@@ -57,7 +57,6 @@ assina:
 
   oauth2:
     # Redirect to webapp with our own JWT token after authenticating with oauth2 provider
-    # TODO set this to the actual URL of the web app
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
 
@@ -111,7 +110,7 @@ csc:
     # Server is established in portugal, but language is en-US only
     region: "PT"
     lang: "en-US"
-    description: "A remove signature service by Assina for LEI 2021 at UMinho"
+    description: "A remote signature service by Assina for LEI 2021 at UMinho"
     authType:
       - oauth2code
     # google oauth
@@ -126,4 +125,4 @@ logging:
   level:
     org:
       springframework:
-        security: TRACE
+        security: INFO
