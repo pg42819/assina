@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { ASSINA_RSSP_BASE_URL, API_BASE_URL, CSC_BASE_URL, ACCESS_TOKEN } from '../constants';
+import {
+    ASSINA_RSSP_BASE_URL,
+    API_BASE_URL,
+    CSC_BASE_URL,
+    ACCESS_TOKEN,
+    ASSINA_SA_BASE_URL
+} from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -53,7 +59,7 @@ export function signup(signupRequest) {
 
 export function sign(signRequest) {
     return request({
-        url: 'http://localhost:8000/sign',
+        url: ASSINA_SA_BASE_URL +'/sign',
         method: 'POST',
         body: JSON.stringify(signRequest)
     });
@@ -64,7 +70,7 @@ export function createCredential(token) {
         'Authorization': 'Bearer '+token
     };
 
-    return axios.post(API_BASE_URL+'/credentials', 
+    return axios.post(API_BASE_URL+'/credentials',
             {},
             {
                 headers: headers

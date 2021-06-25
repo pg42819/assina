@@ -4,7 +4,7 @@ import './Sign.css';
 import { sign, createCredential } from '../../util/APIUtils';
 import axios from 'axios';
 import Alert from 'react-s-alert';
-import {ACCESS_TOKEN, API_BASE_URL, CSC_BASE_URL} from '../../constants';
+import {ACCESS_TOKEN, ASSINA_SA_BASE_URL, CSC_BASE_URL} from '../../constants';
 import Select from 'react-dropdown-select';
 
 
@@ -63,7 +63,7 @@ class Sign extends Component {
         data.append('pin', this.state.pin);
         data.append('credential', this.state.selectedCredential);
 
-        axios.post('http://localhost:8081/signFile', data, {
+        axios.post(ASSINA_SA_BASE_URL + '/signFile', data, {
             headers: headers
         }).then(res => {
             this.props.history.push({
