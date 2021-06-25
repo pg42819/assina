@@ -5,6 +5,8 @@
 export SERVER_PORT=8081
 export ASSINA_RSSP_BASE_URL=http://13.93.7.40:80
 #export ASSINA_RSSP_BASE_URL=http://localhost:8080
+# Used by CORS
+export ASSINA_CLIENT_BASE_URL=http://20.101.144.136
 
 export JAVA_HOME=/usr/bin/java
 
