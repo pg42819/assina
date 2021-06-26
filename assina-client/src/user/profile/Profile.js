@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import './Profile.css';
 import {ACCESS_TOKEN, API_BASE_URL, CSC_BASE_URL} from '../../constants';
 import axios from 'axios';
+import Alert from 'react-s-alert';
 
 class Profile extends Component {
     constructor(props) {
@@ -24,6 +25,10 @@ class Profile extends Component {
                 numCredentials: res.data.credentialIDs.length
             })
         }).catch(error => console.log(error));
+
+        if(this.props.currentUser.encodedPIN == null) {
+            console.log('NULL');
+        }
 
     }
 
@@ -82,6 +87,15 @@ class Profile extends Component {
                                     <Link to='/userManagement'>Manage Users</Link>
                                 ) : (
                                     <Link to='/sign'>Sign Document</Link>
+                                )
+                            }
+                        </div>
+                        <div className="editProfile">
+                            {
+                                (this.props.currentUser.encodedPIN == null) ? (
+                                    <Link to='/edit'>Please enter your PIN</Link>
+                                ) : (
+                                    <Link to='/edit'>Edit profile</Link>
                                 )
                             }
                         </div>
