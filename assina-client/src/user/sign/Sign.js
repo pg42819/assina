@@ -58,6 +58,16 @@ class Sign extends Component {
 	        'Authorization': 'Bearer '+this.state.token
         };
 
+        if(this.state.file == '') {
+            return(
+                <div>{Alert.warning("Please select a file")}</div>
+            )
+        } else if(this.state.pin == '') {
+            return(
+                <div>{Alert.warning("Please enter your pin")}</div>
+            )
+        }
+
         const data = new FormData();
         data.append('file', this.state.file);
         data.append('pin', this.state.pin);
