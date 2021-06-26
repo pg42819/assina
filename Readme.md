@@ -2,6 +2,14 @@ Assina is a remote signing service provider, and client, adhering to the specifi
 
 ----------------
 
+### Requirements
+
+- Node version: 14.16.0
+- Java: 11
+- Maven
+
+----------------
+
 ### Running the whole application
 
 In the root directory do the following:
