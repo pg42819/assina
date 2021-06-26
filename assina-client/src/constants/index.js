@@ -14,4 +14,9 @@ export const GOOGLE_AUTH_URL = ASSINA_RSSP_BASE_URL + '/oauth2/authorize/google?
 export const FACEBOOK_AUTH_URL = ASSINA_RSSP_BASE_URL + '/oauth2/authorize/facebook?redirect_uri=' + OAUTH2_REDIRECT_URI;
 export const GITHUB_AUTH_URL = API_BASE_URL + '/oauth2/authorize/github?redirect_uri=' + OAUTH2_REDIRECT_URI;
 
+console.log('API_BASE_URL:        ' + API_BASE_URL);
+console.log('CSC_BASE_URL:        ' + CSC_BASE_URL);
+console.log('ASSINA_SA_BASE_URL:  ' + ASSINA_SA_BASE_URL);
+console.log('OAUTH2_REDIRECT_URI: ' + OAUTH2_REDIRECT_URI);
+
 export const ACCESS_TOKEN = 'accessToken';
