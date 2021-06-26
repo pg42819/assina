@@ -8,6 +8,8 @@ In the root directory do the following:
 ./run_everything.sh
 ```
 
+It will install every dependency needed to run the whole app and start both the Frontend and Backend applications.
+
 ----------------
 
 ### Features
