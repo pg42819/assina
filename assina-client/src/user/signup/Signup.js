@@ -77,6 +77,12 @@ class SignupForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
+        if(this.state.pin.length != 4) {
+            return(
+                <div>{Alert.warning("Please enter the pin in the correct format (4 digits)")}</div>
+            )
+        }
+
         const signUpRequest = Object.assign({}, this.state);
 
         signup(signUpRequest)
