@@ -53,8 +53,8 @@ class EditForm extends Component {
         const data = {
             name: this.state.name,
             email: this.state.email,
-            pin: this.state.pin,
-            password: this.state.password
+            plainPIN: this.state.pin,
+            plainPassword: this.state.password
         };
         /*const data = new FormData();
         data.append('name', this.state.name);
@@ -76,18 +76,29 @@ class EditForm extends Component {
     }
 
     render() {
+
+        const provider = this.props.currentUser.provider;
+
         return (
             <form onSubmit={this.handleSubmit}>
-                <div className="form-item">
-                    <input type="text" name="name"
-                        className="form-control" placeholder={this.props.currentUser.name}
-                        value={this.state.name} onChange={this.handleInputChange}/>
-                </div>
-                <div className="form-item">
-                    <input type="email" name="email"
-                        className="form-control" placeholder={this.props.currentUser.email}
-                        value={this.state.email} onChange={this.handleInputChange}/>
-                </div>
+                {
+                    (this.props.currentUser.provider == "local") ? (
+                        <div className="form-item">
+                            <input type="text" name="name"
+                                className="form-control" placeholder={this.props.currentUser.name}
+                                value={this.state.name} onChange={this.handleInputChange}/>
+                        </div>
+                    ) : null
+                }
+                {
+                    (this.props.currentUser.provider == "local") ? (
+                        <div className="form-item">
+                            <input type="email" name="email"
+                                className="form-control" placeholder={this.props.currentUser.email}
+                                value={this.state.email} onChange={this.handleInputChange}/>
+                        </div>
+                    ) : null
+                }
                 <div className="form-item">
                     <input type="password" name="password"
                         className="form-control" placeholder="Enter a password only IF you want to change it"
