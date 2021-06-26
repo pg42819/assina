@@ -34,7 +34,7 @@ public enum AssinaError implements ApiError {
           "The username or email address belongs to an existing user", 409),
 
   OauthUnauthorizedRedirect("unauthorized_redirect", "Sorry! We've got an Unauthorized Redirect " +
-                             "URI and can't proceed wtih authentication", 400),
+                             "URI and can't proceed with authentication", 400),
   FailedCreatingCredential("failed_creating_credential",
           "An error occurred while generating certificate and keys", 500),
 

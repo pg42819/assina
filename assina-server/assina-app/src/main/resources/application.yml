@@ -57,8 +57,10 @@ assina:
 
   oauth2:
     # Redirect to webapp with our own JWT token after authenticating with oauth2 provider
+    # these must be set up in google, github etc
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
+      - http://assina.westeurope.cloudapp.azure.com/ouath2/redirect
 
 demo:
   users:

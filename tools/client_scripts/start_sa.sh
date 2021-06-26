@@ -26,6 +26,10 @@ fi
 
 JAVA_EXE="${JAVA_HOME}/bin/java ${JAVA_OPTS}"
 
+echo "Starting signing app. You can watch the logs with:"
+echo "Use stop_sa.sh to shut it down, show_sa.sh to show the process"
+echo "tail -f ${ASSINA_DIR}/logs/assina/assina-sa-logger.log"
+
 nohup java -jar ${ASSINA_DIR}/*.jar start &
 
 
