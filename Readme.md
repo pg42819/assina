@@ -1,5 +1,7 @@
 Assina is a remote signing service provider, and client, adhering to the specification defined by the Cloud Signing Consortium (CSC) ​
 
+----------------
+
 ### Running the whole application
 
 In the root directory do the following:
@@ -14,28 +16,23 @@ It will install every dependency needed to run the whole app and start both the 
 
 ### Features
 
-- Text (with common formatting options)
-- Images (JPEGs, other **PDFs** ¹)
-- Tables (fixed layout, header row)
-- Header & Footer
-- AFM fonts && OTF font embedding (as CID fonts, i.e., support for fonts with large character sets)
-- Add existing PDFs (merge them or add them as page templates) ¹
-- Document outline
+- Creating new User
+- Create new credentials for User
+- Edit User profile
+- Sign document
 
-A lot of examples can be found in the [test folder](https://github.com/rkusa/pdfjs/tree/master/test/pdfs).
+----------------
 
-If you are missing a feature, feel free to submit a PR or to ask for it.
+### Testing
 
-> ¹ Adding other PDFs as images or merging them together is still being considered a beta - proper error handling is adviced
+In order to test the [Features], please use the following username/password combination and PIN (required to sign documents):
 
-### History
+- username: carlos
+- password: carlos
+- pin: 1234
 
-See [CHANGELOG](https://github.com/rkusa/pdfjs/blob/master/CHANGELOG.md).
+If, however, you wish to test using a Google account, please signup using Google and then set your PIN in the profile page. 
 
-## MIT License
+You need to have at least 1 credential in order to request the signing of a document. 
 
-[MIT](LICENSE)
 
-[npm]: https://img.shields.io/npm/v/pdfjs.svg?style=flat-square
-[deps]: https://img.shields.io/david/rkusa/pdfjs.svg?style=flat-square
-[travis]: https://img.shields.io/travis/rkusa/pdfjs/master.svg?style=flat-square
