@@ -62,12 +62,13 @@ public class CSCInfoController
 	@ResponseStatus(HttpStatus.OK)
 	public CSCInfoResponse info(@RequestBody(required = false) CSCInfoRequest infoRequest)
 	{
-		// we ignore lang but log it if its different from ours
-		String lang = infoRequest.getLang();
-		if (StringUtils.hasText(lang)) {
-			if (!lang.equals(AssinaCSCConstants.CSC_LANG)) {
-				log.warn("Unsupported lang in request: {}. Assina only supports ",
-						lang, AssinaCSCConstants.CSC_LANG);
+		if (infoRequest != null) {
+			// we ignore lang but log it if its different from ours
+			String lang = infoRequest.getLang();
+			if (StringUtils.hasText(lang)) {
+				if (!lang.equals(AssinaCSCConstants.CSC_LANG)) {
+					log.warn("Unsupported lang in request: {}. Assina only supports ", lang, AssinaCSCConstants.CSC_LANG);
+				}
 			}
 		}
 
