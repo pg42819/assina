@@ -27,7 +27,7 @@ public class AssinaSigningService {
 	}
 
 
-	public String signFile(String originalFileName, String PIN, String authorizationHeader) {
+	public String signFile(String originalFileName, String PIN, String credentialID, String authorizationHeader) {
 		String signedFileName;
 		try {
 			Path originalFilePath = fileStorageService.getFilePath(originalFileName);
@@ -37,6 +37,7 @@ public class AssinaSigningService {
 			ClientContext context = new ClientContext();
 			context.setAuthorizationHeader(authorizationHeader);
 			context.setPIN(PIN);
+			context.setCredentialID(credentialID);
 			rsspClient.setContext(context);
 			pdfSupport.signDetached(originalFilePath.toFile(), signedFilePath.toFile());
 		} catch (IOException | NoSuchAlgorithmException e) {

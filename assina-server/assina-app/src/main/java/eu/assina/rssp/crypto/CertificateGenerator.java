@@ -178,7 +178,7 @@ public class CertificateGenerator {
 	}
 
 	public boolean isCertificateExpired(X509Certificate x509Certificate) {
-	    return x509Certificate.getNotAfter().after(nowUTC());
+	    return x509Certificate.getNotAfter().before(nowUTC());
 	}
 
 	private Date nowUTC() {
