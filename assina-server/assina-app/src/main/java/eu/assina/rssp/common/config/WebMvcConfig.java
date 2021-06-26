@@ -22,8 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         String clientUrl = env.getProperty("ASSINA_CLIENT_BASE_URL");
         registry.addMapping("/**")
-        .allowedOrigins(clientUrl)
-//            .allowedOrigins("*")
+        .allowedOrigins(clientUrl, "http://localhost:3000")
         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         .allowedHeaders("*")
         .allowCredentials(true)

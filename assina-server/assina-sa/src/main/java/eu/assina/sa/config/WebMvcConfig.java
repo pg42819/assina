@@ -22,25 +22,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         String clientUrl = env.getProperty("ASSINA_CLIENT_BASE_URL");
         log.warn("CORS: Allowing client origin: {}", clientUrl);
         registry.addMapping("/**")
-                // TODO generalize localhost for client
-                .allowedOrigins(clientUrl)
-//            .allowedOrigins("*")
+                .allowedOrigins(clientUrl, "http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(MAX_AGE_SECS);
     }
-
-//
-//    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer) {
-//        configurer.addPathPrefix(AssinaConstants.API_URL_ROOT,
-//                HandlerTypePredicate.forAnnotation(RestController.class)
-//                        .and(HandlerTypePredicate.forBasePackage(
-//                                        "eu.assina.app.api")));
-//        configurer.addPathPrefix(AssinaConstants.CSC_URL_ROOT,
-//                HandlerTypePredicate.forAnnotation(RestController.class)
-//                        .and(HandlerTypePredicate.forBasePackage(
-//                                "eu.assina.app.csc")));
-//    }
 }
