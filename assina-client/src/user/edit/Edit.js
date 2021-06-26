@@ -99,11 +99,15 @@ class EditForm extends Component {
                         </div>
                     ) : null
                 }
-                <div className="form-item">
-                    <input type="password" name="password"
-                        className="form-control" placeholder="Enter a password only IF you want to change it"
-                        value={this.state.password} onChange={this.handleInputChange}/>
-                </div>
+                {
+                    (this.props.currentUser.provider == "local") ? (
+                        <div className="form-item">
+                            <input type="password" name="password"
+                                className="form-control" placeholder="Enter a password only IF you want to change it"
+                                value={this.state.password} onChange={this.handleInputChange}/>
+                        </div>
+                    ) : null
+                }
                 <div className="form-item">
                     <input type="password" pattern="[0-9][0-9][0-9][0-9]" name="pin" className="form-control" placeholder="Enter a PIN only IF you want to change it"
                             value={this.state.pin} onChange={this.handleInputChange}/>

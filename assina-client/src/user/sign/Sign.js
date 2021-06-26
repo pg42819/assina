@@ -7,7 +7,6 @@ import Alert from 'react-s-alert';
 import {ACCESS_TOKEN, ASSINA_SA_BASE_URL, CSC_BASE_URL} from '../../constants';
 import Select from 'react-dropdown-select';
 
-
 class Sign extends Component {
     constructor(props) {
         super(props);
@@ -57,6 +56,7 @@ class Sign extends Component {
         const headers = {
 	        'Authorization': 'Bearer '+this.state.token
         };
+
 
         if(this.state.file == '') {
             return(
