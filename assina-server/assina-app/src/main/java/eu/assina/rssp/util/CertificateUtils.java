@@ -12,7 +12,7 @@ public class CertificateUtils {
 
     /**
      * Formats a date as a string according to x509 RFC 5280
-     * Assumes the given date is UTC // TODO check this assumption
+     * Assumes the given date is UTC
      * @param date
      * @return null if the date is null otherwise formatted as YYYMMMDDHHMMSSZ
      */

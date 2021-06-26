@@ -29,7 +29,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *     "error_description": "The access token is not valid"
  *   }
  */
-// TODO add support for missing bearer token etc
 @ControllerAdvice
 public class ApiExceptionHandler
 		extends ResponseEntityExceptionHandler

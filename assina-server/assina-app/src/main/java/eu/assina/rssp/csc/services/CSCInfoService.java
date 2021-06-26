@@ -15,7 +15,6 @@ public class CSCInfoService {
 	}
 
 	public CSCInfo getInfo() {
-		// TODO some of the info is from properties but some of it is dynamic domains edtc
 	    return cscProperties.getInfo();
 	}
 }
