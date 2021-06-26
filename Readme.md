@@ -7,7 +7,9 @@ Assina is a remote signing service provider, and client, adhering to the specifi
 In the root directory do the following:
 
 ```bash
-./run_everything.sh
+./runRSSP.sh
+./runSA.sh
+./runFEND.sh
 ```
 
 It will install every dependency needed to run the whole app and start both the Frontend and Backend applications.
