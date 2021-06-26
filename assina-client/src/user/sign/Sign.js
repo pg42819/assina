@@ -122,7 +122,7 @@ class Sign extends Component {
                         })}
                     </select>
                     <div>
-                        <input type="file" name="file" onChange={this.onFileChange}/>
+                        <input type="file" name="file" onChange={this.onFileChange} required/>
                     </div>
                     <div>
                         <input type="password" pattern="[0-9][0-9][0-9][0-9]" name="pin" placeholder="Pin"

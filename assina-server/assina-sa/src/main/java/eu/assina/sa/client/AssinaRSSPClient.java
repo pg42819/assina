@@ -13,6 +13,8 @@ import eu.assina.sa.error.CredentialNotFoundException;
 import eu.assina.sa.error.InvalidRequestException;
 import eu.assina.sa.error.RSSPClientException;
 import eu.assina.sa.model.AssinaSigner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +33,7 @@ public class AssinaRSSPClient implements AssinaSigner {
 
     private WebClient webClient;
     private ClientContext context;
+    private static final Logger log = LoggerFactory.getLogger(AssinaRSSPClient.class);
 
     public AssinaRSSPClient(RSSPClientConfig config) {
         webClient = WebClient.builder().baseUrl(config.setCscBaseUrl())
@@ -39,8 +42,8 @@ public class AssinaRSSPClient implements AssinaSigner {
     }
 
     @Override
-    /** Implements the AssignSigner by signing the hash with several requests to the RSSP */
-    public byte[] signHash(byte[] pdfHash) {
+    /** Prepares the AssignSigner */
+    public ClientContext prepCredenital() {
         final List<String> credentials = listCredentialsForCurrentUser();
         if (credentials == null || credentials.isEmpty()) {
             throw new CredentialNotFoundException("The current user has no credentials with which to sign");
@@ -49,25 +52,18 @@ public class AssinaRSSPClient implements AssinaSigner {
         String credentialID = getContext().getCredentialID();
         if (StringUtils.hasText(credentialID)) {
             // make sure the current user owns the credential if it specified
-            if (credentials.contains(credentialID)) {
+            if (!credentials.contains(credentialID)) {
                 throw new InvalidRequestException("The current user does not own the specified credential");
             }
-        }
-        else {
+        } else {
             // convention: simply use the first credential if there is non specified in the context
             credentialID = credentials.get(0);
         }
-        // TODO add error handling to getCredentialInfo
+        context.setCredentialID(credentialID);
+
         final CSCCredentialsInfoResponse credentialInfo = getCredentialInfo(credentialID);
         if (credentialInfo == null) {
             throw new InvalidRequestException("Could not get info on the specified credential");
-        }
-
-        // now authorize it
-        final String SAD = authorizeCredential(credentialID, getPIN());
-        // TODO add PIN Checking
-        if (SAD == null) {
-            throw new InvalidRequestException("Could not authorize the credential with the PIN");
         }
 
         // get the algo from the credential info
@@ -81,9 +77,29 @@ public class AssinaRSSPClient implements AssinaSigner {
         }
         // simply use the fisrt algo
         String signAlgo = algos.get(0);
+        context.setSignAlgo(signAlgo);
+
+        final CSCCredentialsInfoResponse.Cert cert = credentialInfo.getCert();
+        context.setSubject(cert.getSubjectDN());
+        return context;
+    }
+
+
+    @Override
+    /** Implements the AssignSigner by signing the hash with several requests to the RSSP */
+    public byte[] signHash(byte[] pdfHash, ClientContext context) {
+
+        String credentialID = context.getCredentialID();
+
+        // now authorize it
+        final String SAD = authorizeCredential(credentialID, getPIN());
+        if (SAD == null) {
+            throw new InvalidRequestException("Could not authorize the credential with the PIN");
+        }
 
         // and use it to sign
-        final String signedHash = signHash(new String(pdfHash), credentialID, SAD, signAlgo);
+        log.info("Signing hash with credential: {}", credentialID);
+        final String signedHash = signHash(new String(pdfHash), credentialID, SAD, context.getSignAlgo());
         return signedHash.getBytes(StandardCharsets.UTF_8);
     }
 
@@ -156,6 +172,7 @@ public class AssinaRSSPClient implements AssinaSigner {
     public CSCCredentialsInfoResponse getCredentialInfo(String credentialID) {
         CSCCredentialsInfoRequest request = new CSCCredentialsInfoRequest();
         request.setCredentialID(credentialID);
+        request.setCertInfo(true);
         final CSCCredentialsInfoResponse response = requestCredentialInfo(request).block();
         return response;
     }

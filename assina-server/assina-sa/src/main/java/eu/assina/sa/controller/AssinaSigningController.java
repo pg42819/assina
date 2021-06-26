@@ -38,15 +38,16 @@ public class AssinaSigningController {
 
 	@PostMapping("/signFile")
 	public Object uploadFile(@RequestParam("file") MultipartFile file,
-		@RequestHeader("Authorization") String authorizationHeader,
-		@RequestParam("pin") String pin) {
+							 @RequestHeader("Authorization") String authorizationHeader,
+							 @RequestParam("pin") String pin,
+							 @RequestParam("credential") String credential) {
 
 		if (!StringUtils.hasText(authorizationHeader)) {
 			throw new InvalidRequestException("Expected an authorization header");
 		}
 
 		String originalFileName = fileStorageService.storeFile(file);
-		String signedFileName = signingService.signFile(originalFileName, pin, authorizationHeader);
+		String signedFileName = signingService.signFile(originalFileName, pin, credential, authorizationHeader);
 
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 										 .path("/downloadFile/")

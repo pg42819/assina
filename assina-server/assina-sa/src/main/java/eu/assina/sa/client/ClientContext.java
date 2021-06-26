@@ -10,6 +10,7 @@ public class ClientContext {
     private String signAlgo;
     private String PIN;
     private String pdfHash;
+    private String subject;
 
     public String getAuthorizationHeader() {
         return authorizationHeader;
@@ -57,5 +58,13 @@ public class ClientContext {
 
     public void setPdfHash(String pdfHash) {
         this.pdfHash = pdfHash;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSubject() {
+        return subject;
     }
 }

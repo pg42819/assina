@@ -106,7 +106,7 @@ public class CSCCredentialsService {
 		final String credentialID = infoRequest.getCredentialID();
 		final AssinaCredential credential = loadCredential(credentialID);
 
-		// TODO check if owner matches credential
+
 		CSCCredentialsInfoResponse response = new CSCCredentialsInfoResponse();
 
 		// One of implicit | explicit | oauth2code
