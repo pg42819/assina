@@ -57,14 +57,6 @@ export function signup(signupRequest) {
     });
 }
 
-export function sign(signRequest) {
-    return request({
-        url: ASSINA_SA_BASE_URL +'/sign',
-        method: 'POST',
-        body: JSON.stringify(signRequest)
-    });
-}
-
 export function createCredential(token) {
     const headers = {
         'Authorization': 'Bearer '+token
