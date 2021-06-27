@@ -8,7 +8,8 @@ export ASSINA_RSSP_BASE_URL=http://assinarssp.westeurope.cloudapp.azure.com
 #export ASSINA_RSSP_BASE_URL=http://localhost:8080
 # Used by CORS must match the URL that the browser uses for the client
 # Must include the port number if it is not 80 or 443, must NOT include it otherwise
-export ASSINA_CLIENT_BASE_URL=http://assina.westeurope.cloudapp.azure.com
+#export ASSINA_CLIENT_BASE_URL=http://assina.westeurope.cloudapp.azure.com
+export ASSINA_CLIENT_BASE_URL=http://assina.eu
 #export ASSINA_CLIENT_BASE_URL=http://20.101.144.136
 
 export JAVA_HOME=/usr/bin/java

@@ -61,6 +61,7 @@ assina:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
       - http://assina.westeurope.cloudapp.azure.com/ouath2/redirect
+      - http://assina.eu/ouath2/redirect
 
 demo:
   users:
