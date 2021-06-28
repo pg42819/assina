@@ -4,3 +4,5 @@
 /assina-client/node-modules
 /assina-client-server/node_modules
 /assina-client-server/public
+/**/*.log
+/**/*.pid

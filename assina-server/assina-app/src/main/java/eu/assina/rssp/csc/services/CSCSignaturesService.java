@@ -58,14 +58,13 @@ public class CSCSignaturesService {
 		final List<String> hashes = signHashRequest.getHash();
 		List<String> signedHashes = new ArrayList<>();
 		for (String hash : signHashRequest.getHash()) {
-			// TODO safe to assume default charset for hash (UTF-8)
-			byte[] signedData = cryptoService.signWithPemCertificate(
-					hash.getBytes(),
+			String signedData = cryptoService.signWithPemCertificate(
+					hash,
 					credential.getCertificate(),
 					credential.getPrivateKey(),
 					signHashRequest.getSignAlgo(),
 					signHashRequest.getSignAlgoParams());
-			signedHashes.add(new String(signedData)); // assumes UTF8
+			signedHashes.add(signedData); // assumes UTF8
 		}
 		response.setSignatures(signedHashes);
 		return response;

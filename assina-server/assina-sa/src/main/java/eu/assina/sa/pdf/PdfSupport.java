@@ -11,6 +11,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.ExternalSigningSupport;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -37,10 +42,10 @@ public class PdfSupport {
 
     public byte[] signPdfContent(InputStream content, ClientContext context) throws IOException, NoSuchAlgorithmException {
         byte[] pdfContentBytes = IOUtils.toByteArray(content);
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] pdfHash = digest.digest(pdfContentBytes);
-        byte[] signedHash = signer.signHash(pdfHash, context);
-        return signedHash;
+//        writeToFile("assina_pdf_content", pdfContentBytes);
+        byte[] signedContent = signer.signHash(pdfContentBytes, context);
+//        writeToFile("assina_signed_content", signedContent);
+        return signedContent;
     }
 
     /**
@@ -96,7 +101,9 @@ public class PdfSupport {
         document.addSignature(signature);
         ExternalSigningSupport externalSigning = document.saveIncrementalForExternalSigning(output);
         // invoke external signature service
-        byte[] cmsSignature = signPdfContent(externalSigning.getContent(), context);
+        final InputStream content = externalSigning.getContent();
+//        InputStream newContent = forkToFile("assina_sa_unsigned_pdf_content", content);
+        byte[] cmsSignature = signPdfContent(content, context);
 
         // set signature bytes received from the service
         externalSigning.setSignature(cmsSignature);
@@ -198,4 +205,79 @@ public class PdfSupport {
         catalogDict.setNeedToBeUpdated(true);
         permsDict.setNeedToBeUpdated(true);
     }
+
+    public static String TEST_HASH =
+            "0�\u0006\t*�H��\n" + "\u0001\u0007\u0002��0�\u0002\u0001\u00011\u000F0\n" +
+                    "\u0006\t`�H\u0001e\u0003\u0004\u0002\u0001\u0005\u00000�\u0006\t*�H��\n" +
+                    "\u0001\u0007\u0001��$�\u00043\u0011;�\u0006�+!l�;\b���h�\u00026ȜP�\u001F�q0۶�)\u007F\u0000\u0000\u0000\u0000\u0000\u0000��0�\u0002�0�\u0001��\u0003\u0002\u0001\u0002\u0002\u0006\u0001zNoA�0\n" +
+                    "\u0006\t*�H��\n" +
+                    "\u0001\u0001\u000B\u0005\u00000\u00141\u00120\u0010\u0006\u0003U\u0004\u0003\f\tassina.eu0\u001E\u0017\n" +
+                    "210627170552Z\u0017\n" +
+                    "220627170552Z0\u00111\u000F0\n" +
+                    "\u0006\u0003U\u0004\u0003\f\u0006carlos0�\u0001\"0\n" +
+                    "\u0006\t*�H��\n" +
+                    "\u0001\u0001\u0001\u0005\u0000\u0003�\u0001\u000F\u00000�\u0001\n" +
+                    "\u0002�\u0001\u0001\u0000�{�4�[=�~�\"yQ��;�*K��Ƴ5\"?�\u001A���7�g\u0014$�\u000E_w���,�=a�%�O4�Og\u0000���oQ\u0002�\u0012H'\n" +
+                    "��%=�I\f�Ȱ'5s���30�n�#.�N?J���;��\\H\u000F���0膓-\u001D�\u0019\u0006\u0006A\u0003�O�㣽��#��S�H�;\u001D�Q�\u05EE���¾ ���TFO��\u0019�@M�>�%\u0013�N���ߧ�\u001E�5\u001E�>��YRZV�hT���xS�wwҁp�)��܀�^T�;\u0001M�MHu�T�f%\u0003e8W�]���aw͡ӥFm�va�/7x\u0018/��\u000Fs�\u0002\u0003\u0001\u0000\u0001�\u00130\u00110\u000F\u0006\u0003U\u001D\u0013\u0001\u0001�\u0004\u00050\u0003\u0001\u0001�0\n" +
+                    "\u0006\t*�H��\n" +
+                    "\u0001\u0001\u000B\u0005\u0000\u0003�\u0001\u0001\u0000\u0018�q\u0015���F�)b��:\u001F�J(T�)��\n" +
+                    "ϧ�_Yc���`����H�c�B������\u000B_�>\u0019?P\u0007v)\u001C['@�@G��0�3����\u0015K�3sSO��.�U�\u000B����;\u001A�ȕ�J��1�\"�6�||&��\u001E�\u000B�Q\u0010E�a�[^�+��(\u0006�t��ѧm�Г>��v��3�8�>�\u0006\u001D:�\u001F�\u0011<�E\u0012�ʳ�ڜ�A_6�?|� ��k?\u001C\\\tM��1\"���wI��B'`�\u001B\"U�$�hɵT.i���P\u000B`������`�\u0011cI�f�\u000F\u0013��Yv]\u000F���\b\u0006\u000F�\u0010\u0000\u00001�\u0001�0�\u0001�\u0002\u0001\u00010\u001E0\u00141\u00120\u0010\u0006\u0003U\u0004\u0003\f\tassina.eu\u0002\u0006\u0001zNoA�0\n" + "\u0006\t`�H\u0001e\u0003\u0004\u0002\u0001\u0005\u0000���0\u0018\u0006\t*�H��\n" + "\u0001\t\u00031\u000B\u0006\t*�H��\n" + "\u0001\u0007\u00010\u001C\u0006\t*�H��\n" + "\u0001\t\u00051\u000F\u0017\n" + "210628121147Z0-\u0006\t*�H��\n" + "\u0001\t41 0\u001E0\n" + "\u0006\t`�H\u0001e\u0003\u0004\u0002\u0001\u0005\u0000�\n" + "\u0006\t*�H��\n" + "\u0001\u0001\u000B\u0005\u00000/\u0006\t*�H��\n" + "\u0001\t\u00041\"\u0004 ����\tp�aյcј\u000B��^�\u0004���{�O������.0\n" + "\u0006\t*�H��\n" + "\u0001\u0001\u000B\u0005\u0000\u0004�\u0001\u0000(�)�#B9�X\t�\n" + "\t�\u0011+W��o;��ϊ\u0019,wx*������ �������l�K\u0013vY�,�3s�r\\�2v`�/\u0005�t�~\u0005\u0007T\"t\u0005[h�ڲ-j۳ �������v\u000E�$�\u007F\tb(쑫Qz#�\n" + "Ï�@z_+����a0\u001C>1��t�(�,�����E�\u007F\u058C!����\uF4DA�n�r�\n" +
+                    "�-0�< A�G��)\u0001�k�S\t�\u001A�?\u000F�f\n" +
+                    "F��\u0019}t����\u0005���k��\u0017�MFVqڠ\n" +
+                    "�eݗ%��8�gc�69�$�`KC�\b:�ּ�l �i�\n" +
+                    "\u0000��Q9HMQ۽^�\u0000\u0000\u0000\u0000\u0000\u0000";
+
+    public static void main(String[] args) throws IOException, GeneralSecurityException {
+        PdfSupport signing = new PdfSupport(new AssinaSigner() {
+            @Override
+            public ClientContext prepCredenital() {
+                ClientContext context = new ClientContext();
+                context.setSignAlgo("");
+                context.setSubject("test subject");
+                return context;
+            }
+
+            @Override
+            public byte[] signHash(byte[] pdfHash, ClientContext context) {
+                return TEST_HASH.getBytes(StandardCharsets.UTF_8);
+            }
+        });
+
+        File inFile = new File(args[0]);
+        String name = inFile.getName();
+        String substring = name.substring(0, name.lastIndexOf('.'));
+
+        File outFile = new File(inFile.getParent(), substring + "_signed.pdf");
+        signing.signDetached(inFile, outFile);
+    }
+
+    // For testing only
+    public static void writeToFile(String name, byte[] bytes) {
+        Path dir = Paths.get("/Users/cwerner/um/src/lei/");
+        Path path = dir.resolve(name);
+        try {
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // for testing only
+    public static ByteArrayInputStream forkToFile(String name, InputStream input) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[2048]; // you can configure the buffer size
+            int length;
+            while ((length = input.read(buffer)) != -1) out.write(buffer, 0, length); //copy streams
+            input.close(); // call this in a finally block
+            byte[] result = out.toByteArray();
+            writeToFile(name, result);
+            return new ByteArrayInputStream(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

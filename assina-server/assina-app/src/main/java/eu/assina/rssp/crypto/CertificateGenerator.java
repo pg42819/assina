@@ -10,17 +10,22 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.util.encoders.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -132,12 +137,13 @@ public class CertificateGenerator {
 	 * @param keyPair public/private key pair accompanying the certificate.
 	 * @param subjectName distinguisned name for the certificate subject - usually username or email
 	 *
+	 * @param credentiaId
 	 * @return
 	 * @throws OperatorCreationException
 	 * @throws CertificateException
 	 * @throws IOException
 	 */
-	public X509Certificate createSelfSignedCert(KeyPair keyPair, String subjectName)
+	public X509Certificate createSelfSignedCert(KeyPair keyPair, String subjectName, String credentiaId)
 			throws OperatorCreationException, CertificateException, IOException {
 		init();
 		Provider bcProvider = new BouncyCastleProvider();
@@ -174,6 +180,15 @@ public class CertificateGenerator {
 
 		final X509Certificate certificate =
 				new JcaX509CertificateConverter().setProvider(bcProvider).getCertificate(certBuilder.build(contentSigner));
+
+		// for testing only  - write the cert and to a file and to a keysotre
+//		try {
+//			writeCertToFileBase64Encoded(certificate, credentiaId + ".cer");
+//			exportKeyPairToKeystoreFile(bcProvider, keyPair, certificate, credentiaId, "latest-cert.pfx", "PKCS12", "pass");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
 		return certificate;
 	}
 
@@ -184,5 +199,23 @@ public class CertificateGenerator {
 	private Date nowUTC() {
 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		return calendar.getTime();
+	}
+
+	// Debug method for storing cert and keypair in local keystore
+	private void exportKeyPairToKeystoreFile(Provider bcProvider, KeyPair keyPair, Certificate certificate, String alias, String fileName, String storeType, String storePass) throws Exception {
+		KeyStore sslKeyStore = KeyStore.getInstance(storeType, bcProvider);
+		sslKeyStore.load(null, null);
+		sslKeyStore.setKeyEntry(alias, keyPair.getPrivate(),null, new Certificate[]{certificate});
+		FileOutputStream keyStoreOs = new FileOutputStream(fileName);
+		sslKeyStore.store(keyStoreOs, storePass.toCharArray());
+	}
+
+	// debug method for writing cert to file
+	private void writeCertToFileBase64Encoded(Certificate certificate, String fileName) throws Exception {
+		FileOutputStream certificateOut = new FileOutputStream(fileName);
+		certificateOut.write("-----BEGIN CERTIFICATE-----".getBytes());
+		certificateOut.write(Base64.encode(certificate.getEncoded()));
+		certificateOut.write("-----END CERTIFICATE-----".getBytes());
+		certificateOut.close();
 	}
 }

@@ -100,7 +100,7 @@ public class CryptoTests {
 	public void testCertificateRoundTrip() throws Exception {
 		CertificateGenerator generator = new CertificateGenerator(config);
 		final KeyPair keyPair = generator.generateKeyPair();
-		final X509Certificate originalCert = generator.createSelfSignedCert(keyPair, "test-subject");
+		final X509Certificate originalCert = generator.createSelfSignedCert(keyPair, "test-subject", "ignored");
 		final PemConverter converter = new PemConverter(config);
 
 		String pemCertificate = converter.certificateToString(originalCert);

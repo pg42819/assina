@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -99,8 +100,10 @@ public class AssinaRSSPClient implements AssinaSigner {
 
         // and use it to sign
         log.info("Signing hash with credential: {}", credentialID);
-        final String signedHash = signHash(new String(pdfHash), credentialID, SAD, context.getSignAlgo());
-        return signedHash.getBytes(StandardCharsets.UTF_8);
+        final String pdfHashB64 = Base64.getEncoder().encodeToString(pdfHash);
+        final String signedHashB64 = signHash(pdfHashB64, credentialID, SAD, context.getSignAlgo());
+        byte[] signedHash = Base64.getDecoder().decode(signedHashB64);
+        return signedHash;
     }
 
     public Mono<CSCCredentialsListResponse> requestCredentialList(CSCCredentialsListRequest request) {

@@ -7,6 +7,7 @@ import eu.assina.rssp.common.model.AssinaCredential;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.pkcs.PKCSException;
+import org.bouncycastle.util.encoders.Base64Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 
 @Component
 public class AssinaCryptoService {
@@ -40,10 +42,10 @@ public class AssinaCryptoService {
     public AssinaCredential createCredential(String owner, String subjectDN)
     {
         try {
+            AssinaCredential credential = new AssinaCredential();
             final KeyPair keyPair = generator.generateKeyPair();
             final X509Certificate selfSignedCert =
-                    generator.createSelfSignedCert(keyPair, subjectDN);
-            AssinaCredential credential = new AssinaCredential();
+                    generator.createSelfSignedCert(keyPair, subjectDN, credential.getId());
             credential.setKeyAlgorithmOIDs(generator.getKeyAlgorithmOIDs());
             credential.setKeyBitLength(generator.getKeyBitLength());
             credential.setECDSACurveOID(generator.getECSDACurveOID());
@@ -62,14 +64,16 @@ public class AssinaCryptoService {
         }
     }
 
-    public byte[] signWithPemCertificate(byte[] dataToSign, String pemCertificate, String pemSigningKey,
+    public String signWithPemCertificate(String dataToSignB64, String pemCertificate, String pemSigningKey,
                                          String signingAlgo, String signingAlgoParams) {
         // TODO validate signingAlgo against the signing algo params
         final X509Certificate x509Certificate = pemToX509Certificate(pemCertificate);
         final PrivateKey privateKey = pemToPrivateKey(pemSigningKey);
         try {
+            byte[] dataToSign = Base64.getDecoder().decode(dataToSignB64);
             final byte[] bytes = cryptoSigner.signData(dataToSign, x509Certificate, privateKey);
-            return bytes;
+            final String signedDataB64 = Base64.getEncoder().encodeToString(bytes);
+            return signedDataB64;
         } catch (CertificateEncodingException | IOException | CMSException | OperatorCreationException e) {
             throw new ApiException(AssinaError.FailedSigningData, e);
         }

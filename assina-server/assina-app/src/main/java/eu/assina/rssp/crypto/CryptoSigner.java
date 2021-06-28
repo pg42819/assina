@@ -14,7 +14,13 @@ import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.bouncycastle.util.Store;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -64,20 +70,20 @@ public class CryptoSigner {
                 new JcaDigestCalculatorProviderBuilder().setProvider("BC").build())
                                                     .build(contentSigner, signingCertificate));
         cmsGenerator.addCertificates(certs);
-        CMSSignedData cms = cmsGenerator.generate(cmsData, true);
+        CMSSignedData cms = cmsGenerator.generate(cmsData, false);
         signedMessage = cms.getEncoded();
         return signedMessage;
     }
 
-    /**
-     * Verfies thhe signed data
-     * @param signedData
-     * @return
-     * @throws CMSException
-     * @throws IOException
-     * @throws OperatorCreationException
-     * @throws CertificateException
-     */
+        /**
+         * Verfies thhe signed data
+         * @param signedData
+         * @return
+         * @throws CMSException
+         * @throws IOException
+         * @throws OperatorCreationException
+         * @throws CertificateException
+         */
     public boolean verifSignData(final byte[] signedData) throws CMSException, IOException, OperatorCreationException, CertificateException {
         // TODO remove this or pass in the certs
         ByteArrayInputStream bIn = new ByteArrayInputStream(signedData);
@@ -126,4 +132,47 @@ public class CryptoSigner {
         }
         return decryptedData;
     }
+
+    // For testing only
+    public static byte[] readFromFile(String name) {
+        Path dir = Paths.get("/Users/cwerner/um/src/lei/");
+        Path path = dir.resolve(name);
+        try {
+            byte[] bytes = Files.readAllBytes(path);
+            return bytes;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // For testing only
+    public static void writeToFile(String name, byte[] bytes) {
+        Path dir = Paths.get("/Users/cwerner/um/src/lei/");
+        Path path = dir.resolve(name);
+        try {
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // for testing only
+    public static ByteArrayInputStream forkToFile(String name, InputStream input) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[2048]; // you can configure the buffer size
+            int length;
+            while ((length = input.read(buffer)) != -1) out.write(buffer, 0, length); //copy streams
+            input.close(); // call this in a finally block
+            byte[] result = out.toByteArray();
+            writeToFile(name, result);
+            return new ByteArrayInputStream(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

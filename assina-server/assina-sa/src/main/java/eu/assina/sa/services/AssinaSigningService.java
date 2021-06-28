@@ -5,6 +5,8 @@ import eu.assina.sa.client.ClientContext;
 import eu.assina.sa.config.RSSPClientConfig;
 import eu.assina.sa.error.InternalErrorException;
 import eu.assina.sa.pdf.PdfSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 @Service
 public class AssinaSigningService {
 
+	private static final Logger log = LoggerFactory.getLogger(AssinaSigningService.class);
 	final AssinaRSSPClient rsspClient;
 	PdfSupport pdfSupport;
 	private FileStorageService fileStorageService;
@@ -41,6 +44,7 @@ public class AssinaSigningService {
 			rsspClient.setContext(context);
 			pdfSupport.signDetached(originalFilePath.toFile(), signedFilePath.toFile());
 		} catch (IOException | NoSuchAlgorithmException e) {
+			log.error("Internal error in Signing Application", e);
 			throw new InternalErrorException("Internal error in Signing Application", e);
 		} finally {
 			rsspClient.setContext(null); // clear it just in case it gets resused
